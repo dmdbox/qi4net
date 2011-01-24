@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
+using Ornament;
 
-namespace Ornament
+namespace Qi
 {
     /// <summary>
     /// 

@@ -58,6 +58,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnumDescription.cs" />
+    <Compile Include="EnumHelper.cs" />
     <Compile Include="IO\IniReader.cs" />
     <Compile Include="IO\IoExtender.cs" />
     <Compile Include="Net\IpAddressExtender.cs" />

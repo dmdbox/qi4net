@@ -1,6 +1,6 @@
 using System;
 
-namespace Ornament
+namespace Qi
 {
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public sealed class EnumDescriptionAttribute : Attribute
