@@ -66,34 +66,27 @@ namespace Qi.Sms.Protocol
 
 
         /// <summary>
-        /// 
+        /// Init command from string command, if this command belong to this command return true, or return false.
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
         public virtual bool Init(string command)
         {
+            var result = false;
             if (command.ToUpper().Contains("OK"))
             {
                 Success = true;
-                return InitContent(command);
+                result = true;
+
             }
             else if (command.ToUpper().Contains("ERROR"))
             {
                 Success = false;
-                return InitContent(command);
+                result = true;
             }
-            else
-            {
-                return false;
-            }
-
+            return result;
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="content"></param>
-        /// <returns></returns>
-        protected abstract bool InitContent(string content);
+
         /// <summary>
         /// 
         /// </summary>

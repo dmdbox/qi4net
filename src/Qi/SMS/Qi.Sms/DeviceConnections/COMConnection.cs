@@ -10,7 +10,7 @@ namespace Qi.Sms.DeviceConnections
     public sealed class ComConnection : IDeviceConnection
     {
         private readonly object _lockItem = "";
-        private readonly ILog _log = LogManager.GetLogger(typeof(ComConnection));
+        private readonly ILog _log = LogManager.GetLogger(typeof (ComConnection));
         private readonly SerialPort _serialPort;
         private bool _hasReturnValue;
         private StringBuilder _returnValue;
@@ -19,7 +19,7 @@ namespace Qi.Sms.DeviceConnections
         {
             if (portName == null)
                 throw new ArgumentNullException("portName");
-            this.PortName = portName;
+            PortName = portName;
             BaudRate = baudRate;
             _serialPort = new SerialPort(portName, BaudRate, Parity.None, 8, StopBits.One)
                               {
@@ -78,16 +78,11 @@ namespace Qi.Sms.DeviceConnections
         {
             get { return _serialPort; }
         }
-        public bool IsConnected { get; private set; }
-        public void Send(string command)
-        {
 
-            _log.Debug("Send:" + command);
-            _serialPort.WriteLine(command + "\r\n");
-        }
+        public bool IsConnected { get; private set; }
+
         public string Send(AbstractCommand command)
         {
-
             if (SendingEvent != null)
                 SendingEvent(this, new DeviceCommandEventHandlerArgs(command.CompleteCommand()));
             _log.InfoFormat("send command {0}\r\n", command);
@@ -132,9 +127,15 @@ namespace Qi.Sms.DeviceConnections
 
         #endregion
 
+        public void Send(string command)
+        {
+            _log.Debug("Send:" + command);
+            _serialPort.WriteLine(command + "\r\n");
+        }
+
         private void SerialPortDataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            var serialPort = (SerialPort)sender;
+            var serialPort = (SerialPort) sender;
             var result = new StringBuilder();
             while (serialPort.BytesToRead > 0)
             {
