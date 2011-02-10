@@ -5,14 +5,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{109EBD31-85C7-45C9-A850-EF3457055670}</ProjectGuid>
+    <ProjectGuid>{D977A1FD-CA69-4A1F-9157-A8D47AF94831}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Qi</RootNamespace>
-    <AssemblyName>Qi</AssemblyName>
+    <RootNamespace>Qi.Web</RootNamespace>
+    <AssemblyName>Qi.Web</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkSubset>Client</TargetFrameworkSubset>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,11 +35,12 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Net">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Runtime.Serialization">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -52,18 +52,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EnumDescription.cs" />
-    <Compile Include="EnumHelper.cs" />
-    <Compile Include="IO\IniReader.cs" />
-    <Compile Include="IO\IoExtender.cs" />
-    <Compile Include="Net\Ftp\FtpDirectory.cs" />
-    <Compile Include="Net\Ftp\FtpFile.cs" />
-    <Compile Include="Net\Ftp\FtpItem.cs" />
-    <Compile Include="Net\IpAddressExtender.cs" />
-    <Compile Include="Net\NetworkException.cs" />
+    <Compile Include="JsonHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Text\NamedFormatterHelper.cs" />
-    <Compile Include="Time.cs" />
+    <Compile Include="WebExtender.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
