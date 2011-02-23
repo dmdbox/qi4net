@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Net;
 using System.Web;
 
@@ -10,9 +11,14 @@ namespace Qi.Web
         {
             if (request == null)
                 throw new ArgumentNullException("request");
-            string ip = request.ServerVariables["HTTP_VIA"] != null
-                            ? request.ServerVariables["HTTP_X_FORWARDED_FOR"]
-                            : request.ServerVariables["REMOTE_ADDR"];
+            return GetClientIp(request.ServerVariables);
+        }
+
+        public static IPAddress GetClientIp(NameValueCollection serverVariables)
+        {
+            string ip = serverVariables["HTTP_VIA"] != null
+                         ? serverVariables["HTTP_X_FORWARDED_FOR"]
+                         : serverVariables["REMOTE_ADDR"];
             return IPAddress.Parse(ip);
         }
     }

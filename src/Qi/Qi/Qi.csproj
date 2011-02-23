@@ -52,13 +52,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationHelper.cs" />
     <Compile Include="EnumDescription.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="IO\IniReader.cs" />
     <Compile Include="IO\IoExtender.cs" />
-    <Compile Include="Net\Ftp\FtpDirectory.cs" />
-    <Compile Include="Net\Ftp\FtpFile.cs" />
-    <Compile Include="Net\Ftp\FtpItem.cs" />
     <Compile Include="Net\IpAddressExtender.cs" />
     <Compile Include="Net\NetworkException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
