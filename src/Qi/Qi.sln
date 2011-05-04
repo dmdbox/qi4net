@@ -1,13 +1,13 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qi", "Qi\Qi.csproj", "{109EBD31-85C7-45C9-A850-EF3457055670}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{38F7EB93-89A2-4D46-BCAE-BA825CE929BF}"
 	ProjectSection(SolutionItems) = preProject
 		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
 		Qi.vsmdi = Qi.vsmdi
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qi", "Qi\Qi.csproj", "{109EBD31-85C7-45C9-A850-EF3457055670}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qi.Test", "Qi.Test\Qi.Test.csproj", "{4C992364-F6E5-4D4D-8246-9FA07DB2A48F}"
 EndProject
