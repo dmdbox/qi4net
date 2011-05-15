@@ -77,7 +77,6 @@
   <ItemGroup>
     <Compile Include="ApplicationHelperTest.cs" />
     <Compile Include="EnumHelperTest.cs" />
-    <Compile Include="FtpDirectoryTest.cs" />
     <Compile Include="NamedFormatterHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimeTest.cs" />
@@ -112,6 +111,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Shadow Include="Test References\Qi.accessor" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -13,14 +13,17 @@ namespace Qi
         {
             get { return AppDomain.CurrentDomain.BaseDirectory; }
         }
-
-        public static bool IsWeb
-        {
-            get { return false; }
-        }
-
+   
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">path is null </exception>
         public static string MapPath(string path)
         {
+            if (path == null)
+                throw new ArgumentNullException("path");
             if (path.StartsWith("~"))
                 path = path.Substring(1);
             return MapPath(new DirectoryInfo(PhysicalApplicationPath), path);
