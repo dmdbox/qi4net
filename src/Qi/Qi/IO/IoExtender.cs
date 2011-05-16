@@ -26,17 +26,18 @@ namespace Qi.IO
                     a.Create();
             }
         }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="parentDirectory"></param>
-        /// <param name="searchPattern">support *.exe, *.bat|*.exe|*.dll </param>
+        /// <param name="searchPattern">support *.exe, or *.bat|*.exe|*.dll </param>
         /// <param name="searchOption"></param>
         /// <returns></returns>
         public static FileInfo[] GetFilesEx(this DirectoryInfo parentDirectory, string searchPattern,
                                             SearchOption searchOption)
         {
-            string[] searchPatterns = searchPattern.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] searchPatterns = searchPattern.Split(new[] {'|'}, StringSplitOptions.RemoveEmptyEntries);
             var files = new List<FileInfo>();
             foreach (string sp in searchPatterns)
             {

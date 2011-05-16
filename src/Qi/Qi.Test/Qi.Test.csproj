@@ -75,10 +75,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationHelperTest.cs" />
-    <Compile Include="EnumHelperTest.cs" />
+    <Compile Include="EnumDescriptionAttributeTest.cs" />
     <Compile Include="NamedFormatterHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource1.resx</DependentUpon>
+    </Compile>
     <Compile Include="TimeTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +118,14 @@
   </ItemGroup>
   <ItemGroup>
     <Shadow Include="Test References\Qi.accessor" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource1.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource1.zh-CN.resx" />
+    <EmbeddedResource Include="Resource1.zh-TW.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

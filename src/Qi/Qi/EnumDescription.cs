@@ -2,25 +2,22 @@ using System;
 
 namespace Qi
 {
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
     public sealed class EnumDescriptionAttribute : Attribute
     {
-        public EnumDescriptionAttribute(string description)
+        public EnumDescriptionAttribute(string name)
         {
-            Description = description;
-            IsDefault = false;
+            if (String.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("name");
+            }
+            Name = name;
         }
-
-        public string Description { get; set; }
-
+       
+        public Type ResourceType { get; set; }
         /// <summary>
-        /// 设置或获取Language的属性
+        /// Gets or sets the Name of this descirption.
         /// </summary>
-        public string Language { get; set; }
-
-        /// <summary>
-        /// 设定或获取是否为默认显示方式
-        /// </summary>
-        public bool IsDefault { get; set; }
+        public string Name { get; set; }
     }
 }

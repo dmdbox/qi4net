@@ -116,7 +116,7 @@ namespace Qi
 
         public static DateTime operator -(DateTime dt, Time t1)
         {
-            var tick = dt.Ticks - t1._ticks.Ticks;
+            long tick = dt.Ticks - t1._ticks.Ticks;
             return new DateTime(tick);
         }
 
@@ -127,9 +127,10 @@ namespace Qi
 
         public static DateTime operator +(DateTime dt, Time t1)
         {
-            var tick = dt.Ticks + t1._ticks.Ticks;
+            long tick = dt.Ticks + t1._ticks.Ticks;
             return new DateTime(tick);
         }
+
         public static DateTime operator +(Time t1, DateTime dt)
         {
             return dt + t1;
@@ -144,6 +145,7 @@ namespace Qi
         {
             return !(a == b);
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -164,19 +166,19 @@ namespace Qi
         {
             unchecked
             {
-                return _ticks.GetHashCode() * 3;
+                return _ticks.GetHashCode()*3;
             }
         }
 
         public override bool Equals(object obj)
         {
-            var result = base.Equals(obj);
+            bool result = base.Equals(obj);
             if (result)
                 return true;
-            if (obj.GetType() != this.GetType())
+            if (obj.GetType() != GetType())
                 return true;
 
-            return ((Time)obj) == this;
+            return ((Time) obj) == this;
         }
     }
 }

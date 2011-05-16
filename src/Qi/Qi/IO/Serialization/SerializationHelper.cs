@@ -6,6 +6,7 @@ namespace Qi.IO.Serialization
 {
     public static class SerializationHelper
     {
+
         public static void SerializeBinary(this object obj, Stream outputSteam)
         {
             IFormatter formatter = new BinaryFormatter();
@@ -19,14 +20,24 @@ namespace Qi.IO.Serialization
                 obj.SerializeBinary(stream);
             }
         }
-
-        public static object UnserializeBinary(Stream objectStream)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="objectStream"></param>
+        /// <returns></returns>
+        public static T DeserializeBinary<T>(Stream objectStream)
         {
             IFormatter formatter = new BinaryFormatter();
-            return formatter.Deserialize(objectStream);
+            return (T)formatter.Deserialize(objectStream);
         }
-
-        public static object UnserializeBinary(string file)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public static T DeserializeBinary<T>(string file)
         {
             if (!File.Exists(file))
             {
@@ -34,7 +45,7 @@ namespace Qi.IO.Serialization
             }
             using (FileStream stream = File.OpenRead(file))
             {
-                return UnserializeBinary(stream);
+                return UnserializeBinary<T>(stream);
             }
         }
     }
