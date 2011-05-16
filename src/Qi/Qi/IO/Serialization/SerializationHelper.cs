@@ -45,7 +45,7 @@ namespace Qi.IO.Serialization
             }
             using (FileStream stream = File.OpenRead(file))
             {
-                return UnserializeBinary<T>(stream);
+                return DeserializeBinary<T>(stream);
             }
         }
     }
