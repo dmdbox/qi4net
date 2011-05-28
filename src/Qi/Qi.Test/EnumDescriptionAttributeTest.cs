@@ -89,7 +89,7 @@ namespace Qi.Test
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("zh-TW");
             Resource1.Culture = Thread.CurrentThread.CurrentCulture;
-            result = EnumHelper.ToString(TestResource.Apple);
+            result = EnumHelper.ToString(TestResource.Apple, CultureInfo.GetCultureInfo("zh-TW"));
             Assert.AreEqual(Resource1.String1, result);
 
         }
@@ -120,37 +120,6 @@ namespace Qi.Test
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
-        /// <summary>
-        ///A test for IsDefault
-        ///</summary>
-        [TestMethod()]
-        public void IsDefaultTest()
-        {
-            string description = string.Empty; // TODO: Initialize to an appropriate value
-            EnumDescriptionAttribute target = new EnumDescriptionAttribute(description); // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
-            bool actual;
-            target.IsDefault = expected;
-            actual = target.IsDefault;
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
-        /// <summary>
-        ///A test for Language
-        ///</summary>
-        [TestMethod()]
-        public void LanguageTest()
-        {
-
-            string description = string.Empty; // TODO: Initialize to an appropriate value
-            EnumDescriptionAttribute target = new EnumDescriptionAttribute(description); // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
-            string actual;
-            target.Language = expected;
-            actual = target.Language;
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
+    
     }
 }

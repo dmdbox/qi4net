@@ -76,17 +76,6 @@ namespace Qi.Test
         }
 
         /// <summary>
-        ///A test for IsWeb
-        ///</summary>
-        [TestMethod()]
-        public void IsWebTest()
-        {
-            bool actual;
-            actual = ApplicationHelper.IsWeb;
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
-        /// <summary>
         ///A test for MapPath
         ///</summary>
         [TestMethod()]
