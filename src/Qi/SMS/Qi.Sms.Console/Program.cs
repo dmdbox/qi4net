@@ -36,7 +36,7 @@ namespace Qi.Sms.ConsoleTest
             //    // _log.Error("Start sms service have error", ex);
             //    Thread.Sleep(1000);
             //}
-            var conn = new ComConnection("COM3", 38400);
+            var conn = new ComConnection("COM4", 9600);
             conn.Open();
             try
             {
@@ -56,6 +56,7 @@ namespace Qi.Sms.ConsoleTest
                 ThreadPool.QueueUserWorkItem(MultiSend1, service);
                 //ThreadPool.QueueUserWorkItem(MultiSend2, service);
                 //ThreadPool.QueueUserWorkItem(MultiSend3, service);
+                Console.Read();
             }
             catch (Exception ex)
             {
@@ -74,7 +75,7 @@ namespace Qi.Sms.ConsoleTest
         public static void MultiSend1(object state)
         {
             var sender = (SmsService)state;
-            var sb = new StringBuilder("其实这是一个中文长短信的测试，这里有多少字，我其实也不知道，不过只要超过70个字符就可以了，。");
+            var sb = new StringBuilder("其实这是一个中文长短信的测试，这里有多少字，我其实也不知道，不过只要超过70个字符就可以了，。其实这是一个中文长短信的测试，这里有多少字，我其实也不知道，不过只要超过70个字符就可以了，。其实这是一个中文长短信的测试，这里有多少字，我其实也不知道，不过只要超过70个字符就可以了，。");
 
             sender.Send("8613532290006", sb.ToString(), SmsFormat.Pdu);
         }
