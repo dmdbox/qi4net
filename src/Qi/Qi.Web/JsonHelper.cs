@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
@@ -22,6 +23,7 @@ namespace Qi.Web
             var serializer = new JavaScriptSerializer();
             return serializer.Serialize(obj);
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -30,10 +32,25 @@ namespace Qi.Web
         /// <returns></returns>
         public static string ToDataContactJson(object obj, params Type[] knowTypes)
         {
-            var dcs = knowTypes == null ? new DataContractSerializer(obj.GetType()) : new DataContractSerializer(obj.GetType(), knowTypes);
+            DataContractSerializer dcs = knowTypes == null
+                                             ? new DataContractSerializer(obj.GetType())
+                                             : new DataContractSerializer(obj.GetType(), knowTypes);
             var memoryStream = new MemoryStream();
             dcs.WriteObject(memoryStream, obj);
             return Encoding.UTF8.GetString(memoryStream.ToArray());
+        }
+
+        public static string ToJson(Dictionary<string, object> data)
+        {
+            var buffer = new StringBuilder("{");
+            foreach (string o in data.Keys)
+            {
+                buffer.Append("{\"").Append(o)
+                    .Append("\":")
+                    .Append(ToJson(data[o]));
+            }
+            buffer.Append("}");
+            return buffer.ToString();
         }
     }
 }

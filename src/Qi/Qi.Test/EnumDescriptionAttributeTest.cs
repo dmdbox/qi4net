@@ -72,7 +72,12 @@ namespace Qi.Test
         //
         #endregion
 
-
+        [TestMethod]
+        public void TestGe()
+        {
+            var di = EnumHelper.GetDescriptionList<TestResource>();
+            Assert.AreEqual(2, di.Count);
+        }
 
         [TestMethod]
         public void EnumDescriptionAttribute_ResourceKey_multiDistrict()
@@ -120,6 +125,6 @@ namespace Qi.Test
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
-    
+
     }
 }
