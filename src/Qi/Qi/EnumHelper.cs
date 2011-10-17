@@ -147,46 +147,44 @@ namespace Qi
             return (T) Enum.Parse(typeof (T), enumExpress, true);
         }
 
-        public static Dictionary<string, T> GetDescriptionList<T>()
+        public static SortedDictionary<string, T> GetDescriptionList<T>()
         {
             return GetDescriptionList<T>(Thread.CurrentThread.CurrentUICulture);
         }
 
-        public static Dictionary<string, T> GetDescriptionList<T>(CultureInfo cultureInfo)
+        public static SortedDictionary<string, object> GetDescriptionList(Type enumType)
         {
-            if (typeof (T) != typeof (Enum))
-            {
-                if (typeof (T).BaseType != typeof (Enum))
-                    throw new ArgumentException("Only support Enum");
-            }
+            return GetDescriptionList(enumType, Thread.CurrentThread.CurrentUICulture);
+        }
 
-
-            FieldInfo[] fields = typeof (T).GetFields();
-            var result = new Dictionary<string, T>();
+        public static SortedDictionary<string, object> GetDescriptionList(Type enumType, CultureInfo cultureInfo)
+        {
+            FieldInfo[] fields = enumType.GetFields();
+            var result = new SortedDictionary<string, object>();
 
             foreach (FieldInfo field in fields)
             {
-                if (field.IsSpecialName)
+                if (field.IsSpecialName || !field.IsLiteral)
                     continue;
+                object value = field.GetValue(null);
+                string descript = GetStringFromAttr(field, cultureInfo);
+                result.Add(descript ?? value.ToString(), value);
+            }
+            return result;
+        }
 
-                object[] descriptionAttributeList = field.GetCustomAttributes(typeof (EnumDescriptionAttribute), false);
-                var value = (T) field.GetValue(null);
+        public static SortedDictionary<string, T> GetDescriptionList<T>(CultureInfo cultureInfo)
+        {
+            FieldInfo[] fields = typeof (T).GetFields();
+            var result = new SortedDictionary<string, T>();
 
-                if (descriptionAttributeList.Length == 0)
-                {
-                    result.Add(value.ToString(), value);
-                }
-                else
-                {
-                    var attr = (EnumDescriptionAttribute) descriptionAttributeList[0];
-                    string name = attr.Name;
-                    if (attr.ResourceType != null)
-                    {
-                        var resourceManager = new ResourceManager(attr.ResourceType);
-                        name = resourceManager.GetString(attr.Name, cultureInfo) ?? attr.Name;
-                    }
-                    result.Add(name, value);
-                }
+            foreach (FieldInfo field in fields)
+            {
+                if (field.IsSpecialName || !field.IsLiteral)
+                    continue;
+                object value = field.GetValue(null);
+                string descript = GetStringFromAttr(field, cultureInfo);
+                result.Add(descript ?? value.ToString(), (T) value);
             }
             return result;
         }

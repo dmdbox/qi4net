@@ -10,9 +10,10 @@ namespace Qi
         /// </summary>
         /// <param name="name">show name of the Enum value, if set the <seealso cref="ResourceType"/>, it means the Key of resource. </param>
         public EnumDescriptionAttribute(string name)
-        {         
+        {
             Name = name;
         }
+
         /// <summary>
         /// Gets or sets the type of resource¡£
         /// </summary>

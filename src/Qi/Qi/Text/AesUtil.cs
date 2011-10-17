@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -30,13 +28,14 @@ namespace Qi.Text
             byte[] keyArray = Encoding.UTF8.GetBytes(shareKey);
             byte[] toEncryptArray = Encoding.UTF8.GetBytes(toEncrypt);
 
-            var rDel = new RijndaelManaged { Key = keyArray, Mode = CipherMode.ECB, Padding = PaddingMode.PKCS7 };
+            var rDel = new RijndaelManaged {Key = keyArray, Mode = CipherMode.ECB, Padding = PaddingMode.PKCS7};
 
             ICryptoTransform cTransform = rDel.CreateEncryptor();
             byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
 
             return Convert.ToBase64String(resultArray, 0, resultArray.Length);
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -61,11 +60,11 @@ namespace Qi.Text
             byte[] toEncryptArray = Convert.FromBase64String(toDecrypt);
 
             var rDel = new RijndaelManaged
-            {
-                Key = keyArray,
-                Mode = CipherMode.ECB,
-                Padding = PaddingMode.PKCS7
-            };
+                           {
+                               Key = keyArray,
+                               Mode = CipherMode.ECB,
+                               Padding = PaddingMode.PKCS7
+                           };
 
             ICryptoTransform cTransform = rDel.CreateDecryptor();
             byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);

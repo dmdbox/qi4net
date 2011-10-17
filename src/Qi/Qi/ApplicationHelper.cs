@@ -13,7 +13,7 @@ namespace Qi
         {
             get { return AppDomain.CurrentDomain.BaseDirectory; }
         }
-   
+
         /// <summary>
         /// 
         /// </summary>

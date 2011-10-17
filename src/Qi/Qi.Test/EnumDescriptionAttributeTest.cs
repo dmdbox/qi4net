@@ -78,7 +78,7 @@ namespace Qi.Test
         [TestMethod]
         public void TestGe()
         {
-            Dictionary<string, TestResource> di = EnumHelper.GetDescriptionList<TestResource>();
+            var di = EnumHelper.GetDescriptionList<TestResource>();
             Assert.AreEqual(2, di.Count);
         }
 
