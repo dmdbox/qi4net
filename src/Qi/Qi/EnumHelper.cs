@@ -19,11 +19,11 @@ namespace Qi
         /// <returns></returns>
         public static T[] GetObjects<T>()
         {
-            Array s = Enum.GetValues(typeof (T));
+            Array s = Enum.GetValues(typeof(T));
             var result = new T[s.Length];
             for (int i = 0; i < s.Length; i++)
             {
-                result[i] = (T) s.GetValue(i);
+                result[i] = (T)s.GetValue(i);
             }
             return result;
         }
@@ -75,10 +75,10 @@ namespace Qi
 
         public static string GetStringFromAttr(FieldInfo fieldinfo, CultureInfo cultureInfo)
         {
-            object[] attrs = fieldinfo.GetCustomAttributes(typeof (EnumDescriptionAttribute), false);
+            object[] attrs = fieldinfo.GetCustomAttributes(typeof(EnumDescriptionAttribute), false);
             if (attrs.Length != 0)
             {
-                var attr = (EnumDescriptionAttribute) attrs[0];
+                var attr = (EnumDescriptionAttribute)attrs[0];
                 if (attr.ResourceType != null)
                 {
                     var resourceManager = new ResourceManager(attr.ResourceType);
@@ -97,12 +97,13 @@ namespace Qi
 
         private static bool IsMatch(Enum multiEnumValue, FieldInfo infos)
         {
-            var singleEnumValue = (Enum) infos.GetValue(null);
+            var singleEnumValue = (Enum)infos.GetValue(null);
             if (singleEnumValue.Equals(multiEnumValue))
                 return true;
+
             int singleValue = Convert.ToInt32(singleEnumValue);
             int multiValue = Convert.ToInt32(multiEnumValue);
-            if (singleValue < multiValue)
+            if (singleValue != 0 && singleValue < multiValue)
             {
                 return (singleValue & multiValue) == singleValue;
             }
@@ -118,22 +119,22 @@ namespace Qi
         public static T DescriptionToEnum<T>(string descriptionString)
         {
             descriptionString = descriptionString.ToLower().Trim();
-            Type enumType = typeof (T);
+            Type enumType = typeof(T);
             FieldInfo[] infos = enumType.GetFields();
             foreach (FieldInfo info in infos)
             {
-                object[] descripts = info.GetCustomAttributes(typeof (EnumDescriptionAttribute), false);
+                object[] descripts = info.GetCustomAttributes(typeof(EnumDescriptionAttribute), false);
                 if (descripts.Length != 0)
                 {
-                    if (((EnumDescriptionAttribute) descripts[0]).Name.ToLower() == descriptionString)
+                    if (((EnumDescriptionAttribute)descripts[0]).Name.ToLower() == descriptionString)
                     {
-                        return (T) Enum.Parse(enumType, info.Name);
+                        return (T)Enum.Parse(enumType, info.Name);
                     }
                 }
             }
 
             throw new ArgumentOutOfRangeException(
-                "descriptionString", descriptionString, "can't match enum type " + typeof (T).Name);
+                "descriptionString", descriptionString, "can't match enum type " + typeof(T).Name);
         }
 
         /// <summary>
@@ -144,7 +145,7 @@ namespace Qi
         /// <returns></returns>
         public static T ToEnum<T>(string enumExpress)
         {
-            return (T) Enum.Parse(typeof (T), enumExpress, true);
+            return (T)Enum.Parse(typeof(T), enumExpress, true);
         }
 
         public static SortedDictionary<string, T> GetDescriptionList<T>()
@@ -175,7 +176,7 @@ namespace Qi
 
         public static SortedDictionary<string, T> GetDescriptionList<T>(CultureInfo cultureInfo)
         {
-            FieldInfo[] fields = typeof (T).GetFields();
+            FieldInfo[] fields = typeof(T).GetFields();
             var result = new SortedDictionary<string, T>();
 
             foreach (FieldInfo field in fields)
@@ -184,7 +185,7 @@ namespace Qi
                     continue;
                 object value = field.GetValue(null);
                 string descript = GetStringFromAttr(field, cultureInfo);
-                result.Add(descript ?? value.ToString(), (T) value);
+                result.Add(descript ?? value.ToString(), (T)value);
             }
             return result;
         }

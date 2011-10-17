@@ -34,7 +34,13 @@ namespace Qi.Test
             B = 2,
             [EnumDescription("3")] C = 4,
         }
-
+        public enum Car
+        {
+            [EnumDescription("巴士")]
+            Bus,
+            [EnumDescription("跑車")]
+            RaceCard,
+        }
         #endregion
 
         /// <summary>
@@ -83,6 +89,15 @@ namespace Qi.Test
         }
 
         [TestMethod]
+        public void TestToDescription()
+        {
+
+            Assert.AreEqual("巴士",Car.Bus.ToDescription());
+            Assert.AreEqual("跑車", Car.RaceCard.ToDescription());
+        }
+
+
+        [TestMethod]
         public void EnumDescriptionAttribute_ResourceKey_multiDistrict()
         {
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-US");
@@ -99,18 +114,6 @@ namespace Qi.Test
             result = EnumHelper.ToDescription(TestResource.Apple, CultureInfo.GetCultureInfo("zh-TW"));
             Assert.AreEqual(Resource1.String1, result);
         }
-
-        /// <summary>
-        ///A test for EnumDescriptionAttribute Constructor
-        ///</summary>
-        [TestMethod]
-        public void EnumDescriptionAttributeConstructorTest1()
-        {
-            string description = string.Empty; // TODO: Initialize to an appropriate value
-            var target = new EnumDescriptionAttribute(description);
-            Assert.Inconclusive("TODO: Implement code to verify target");
-        }
-
 
         /// <summary>
         ///A test for Description
