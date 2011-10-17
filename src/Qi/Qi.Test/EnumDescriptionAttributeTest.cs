@@ -1,48 +1,50 @@
-﻿using System.Globalization;
-using System.Resources;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
-using Qi;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace Qi.Test
 {
-
-
     /// <summary>
     ///This is a test class for EnumDescriptionAttributeTest and is intended
     ///to contain all EnumDescriptionAttributeTest Unit Tests
     ///</summary>
-    [TestClass()]
+    [TestClass]
     public class EnumDescriptionAttributeTest
     {
-        private enum TestResource
+        #region MultiDescription enum
+
+        [Flags]
+        public enum MultiDescription
         {
-            [EnumDescription("String1", ResourceType = typeof(Resource1))]
-            Apple,
-            [EnumDescription("String2", ResourceType = typeof(Resource1))]
-            Orange
+            [EnumDescription("1")] A = 1,
+            [EnumDescription("2")] B = 2,
+            [EnumDescription("3")] C = 4,
         }
 
-        private TestContext testContextInstance;
+        #endregion
+
+        #region MultiDescription_HaveNotDesctiption enum
+
+        [Flags]
+        public enum MultiDescription_HaveNotDesctiption
+        {
+            [EnumDescription("1")] A = 1,
+            B = 2,
+            [EnumDescription("3")] C = 4,
+        }
+
+        #endregion
 
         /// <summary>
         ///Gets or sets the test context which provides
         ///information about and functionality for the current test run.
         ///</summary>
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
+        public TestContext TestContext { get; set; }
 
         #region Additional test attributes
+
         // 
         //You can use the following additional attributes as you write your tests:
         //
@@ -70,61 +72,81 @@ namespace Qi.Test
         //{
         //}
         //
+
         #endregion
 
         [TestMethod]
         public void TestGe()
         {
-            var di = EnumHelper.GetDescriptionList<TestResource>();
+            Dictionary<string, TestResource> di = EnumHelper.GetDescriptionList<TestResource>();
             Assert.AreEqual(2, di.Count);
         }
 
         [TestMethod]
         public void EnumDescriptionAttribute_ResourceKey_multiDistrict()
         {
-
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-US");
-            var result = EnumHelper.ToString(TestResource.Orange);
+            string result = TestResource.Orange.ToDescription();
             Assert.AreEqual(Resource1.String2, result);
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("zh-CN");
             Resource1.Culture = Thread.CurrentThread.CurrentCulture;
-            result = EnumHelper.ToString(TestResource.Orange);
+            result = TestResource.Orange.ToDescription();
             Assert.AreEqual(Resource1.String2, result);
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("zh-TW");
             Resource1.Culture = Thread.CurrentThread.CurrentCulture;
-            result = EnumHelper.ToString(TestResource.Apple, CultureInfo.GetCultureInfo("zh-TW"));
+            result = EnumHelper.ToDescription(TestResource.Apple, CultureInfo.GetCultureInfo("zh-TW"));
             Assert.AreEqual(Resource1.String1, result);
-
         }
+
         /// <summary>
         ///A test for EnumDescriptionAttribute Constructor
         ///</summary>
-        [TestMethod()]
+        [TestMethod]
         public void EnumDescriptionAttributeConstructorTest1()
         {
             string description = string.Empty; // TODO: Initialize to an appropriate value
-            EnumDescriptionAttribute target = new EnumDescriptionAttribute(description);
+            var target = new EnumDescriptionAttribute(description);
             Assert.Inconclusive("TODO: Implement code to verify target");
+        }
+
+
+        /// <summary>
+        ///A test for Description
+        ///</summary>
+        [TestMethod]
+        public void DescriptionTest_multi_descrption()
+        {
+            const MultiDescription input = MultiDescription.A | MultiDescription.B | MultiDescription.C;
+            string actual = input.ToDescription();
+            string expected = "1,2,3";
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
         ///A test for Description
         ///</summary>
-        [TestMethod()]
-        public void DescriptionTest()
+        [TestMethod]
+        public void DescriptionTest_multi_haveNot_descrption()
         {
-            string description = string.Empty; // TODO: Initialize to an appropriate value
-            EnumDescriptionAttribute target = new EnumDescriptionAttribute(description); // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
-            string actual;
-            target.Name = expected;
-            actual = target.Name;
+            const MultiDescription_HaveNotDesctiption input =
+                MultiDescription_HaveNotDesctiption.A | MultiDescription_HaveNotDesctiption.B |
+                MultiDescription_HaveNotDesctiption.C;
+            string actual = input.ToDescription();
+            string expected = "1,B,3";
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
+        #region Nested type: TestResource
 
+        [Flags]
+        private enum TestResource
+        {
+            [EnumDescription("String1", ResourceType = typeof (Resource1))] Apple,
+            [EnumDescription("String2", ResourceType = typeof (Resource1))] Orange,
+        }
+
+        #endregion
     }
 }

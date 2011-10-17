@@ -18,7 +18,7 @@ namespace Qi.Test.Console
         {
             var a = A.Apple;
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-us");
-            var key = EnumHelper.ToString(a);
+            var key = a.ToDescription();
             System.Console.WriteLine(key);
             System.Console.ReadLine();
         }
