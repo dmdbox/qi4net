@@ -41,11 +41,13 @@ namespace Qi
         public static List<string> ToDescriptionAry(Enum enumValue, CultureInfo cultureInfo)
         {
             Type enuType = enumValue.GetType();
+            var hasFlags = enuType.GetCustomAttributes(typeof(FlagsAttribute), false).Length != 0;
+
             FieldInfo[] fieldinfos = enuType.GetFields();
             var ary = new List<string>(fieldinfos.Length);
             foreach (FieldInfo fieldInfo in fieldinfos)
             {
-                if (fieldInfo.IsLiteral && IsMatch(enumValue, fieldInfo))
+                if (fieldInfo.IsLiteral && IsMatch(enumValue, fieldInfo, hasFlags))
                 {
                     string description = GetStringFromAttr(fieldInfo, cultureInfo);
                     ary.Add(description ?? fieldInfo.GetValue(null).ToString());
@@ -95,11 +97,13 @@ namespace Qi
             return null;
         }
 
-        private static bool IsMatch(Enum multiEnumValue, FieldInfo infos)
+        private static bool IsMatch(Enum multiEnumValue, FieldInfo infos, bool hasFlags)
         {
             var singleEnumValue = (Enum)infos.GetValue(null);
             if (singleEnumValue.Equals(multiEnumValue))
                 return true;
+            else if (!hasFlags)
+                return false;
 
             int singleValue = Convert.ToInt32(singleEnumValue);
             int multiValue = Convert.ToInt32(multiEnumValue);
@@ -165,7 +169,7 @@ namespace Qi
 
             foreach (FieldInfo field in fields)
             {
-                if (field.IsSpecialName || !field.IsLiteral)
+                if (field.IsSpecialName)
                     continue;
                 object value = field.GetValue(null);
                 string descript = GetStringFromAttr(field, cultureInfo);
@@ -176,17 +180,14 @@ namespace Qi
 
         public static SortedDictionary<string, T> GetDescriptionList<T>(CultureInfo cultureInfo)
         {
-            FieldInfo[] fields = typeof(T).GetFields();
-            var result = new SortedDictionary<string, T>();
+            var resultItem = GetDescriptionList(typeof(T));
 
-            foreach (FieldInfo field in fields)
+            var result = new SortedDictionary<string, T>();
+            foreach (var item in resultItem.Keys)
             {
-                if (field.IsSpecialName || !field.IsLiteral)
-                    continue;
-                object value = field.GetValue(null);
-                string descript = GetStringFromAttr(field, cultureInfo);
-                result.Add(descript ?? value.ToString(), (T)value);
+                result.Add(item, (T)resultItem[item]);
             }
+
             return result;
         }
     }

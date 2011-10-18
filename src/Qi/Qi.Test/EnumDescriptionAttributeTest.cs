@@ -13,6 +13,16 @@ namespace Qi.Test
     [TestClass]
     public class EnumDescriptionAttributeTest
     {
+        #region Car enum
+
+        public enum Car
+        {
+            [EnumDescription("巴士")] Bus,
+            [EnumDescription("跑車")] RaceCard,
+        }
+
+        #endregion
+
         #region MultiDescription enum
 
         [Flags]
@@ -34,13 +44,32 @@ namespace Qi.Test
             B = 2,
             [EnumDescription("3")] C = 4,
         }
-        public enum Car
+
+        #endregion
+
+        #region Status enum
+
+        [Flags]
+        public enum Status
         {
-            [EnumDescription("巴士")]
-            Bus,
-            [EnumDescription("跑車")]
-            RaceCard,
+            [EnumDescription("沒有權限")] None = 0,
+            [EnumDescription("讀")] Read = 1,
+            [EnumDescription("寫")] Write = 3,
+            [EnumDescription("刪除")] Delete = 7
         }
+
+        #endregion
+
+        #region StatusNoflags enum
+
+        public enum StatusNoflags
+        {
+            [EnumDescription("沒有權限")] None = 0,
+            [EnumDescription("讀")] Read,
+            [EnumDescription("寫")] Write,
+            [EnumDescription("刪除")] Delete,
+        }
+
         #endregion
 
         /// <summary>
@@ -84,18 +113,39 @@ namespace Qi.Test
         [TestMethod]
         public void TestGe()
         {
-            var di = EnumHelper.GetDescriptionList<TestResource>();
+            SortedDictionary<string, TestResource> di = EnumHelper.GetDescriptionList<TestResource>();
             Assert.AreEqual(2, di.Count);
         }
 
         [TestMethod]
         public void TestToDescription()
         {
-
-            Assert.AreEqual("巴士",Car.Bus.ToDescription());
+            Assert.AreEqual("巴士", Car.Bus.ToDescription());
             Assert.AreEqual("跑車", Car.RaceCard.ToDescription());
         }
 
+        [TestMethod]
+        public void Description_multi_enum()
+        {
+            Status target = Status.Delete;
+            Assert.AreEqual("讀,寫,刪除", target.ToDescription());
+
+            target = Status.Read;
+            Assert.AreEqual("讀", target.ToDescription());
+
+            target = Status.Write;
+            Assert.AreEqual("讀,寫", target.ToDescription());
+        }
+
+        [TestMethod]
+        public void Description_multi_enum_order_without_flagsattr()
+        {
+            StatusNoflags target = StatusNoflags.Delete;
+            Assert.AreEqual("刪除", target.ToDescription());
+
+            target = StatusNoflags.None;
+            Assert.AreEqual("沒有權限", target.ToDescription());
+        }
 
         [TestMethod]
         public void EnumDescriptionAttribute_ResourceKey_multiDistrict()
