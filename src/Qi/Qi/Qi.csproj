@@ -74,6 +74,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationHelper.cs" />
+    <Compile Include="DataTables\Calculators\SumDecimal.cs" />
+    <Compile Include="DataTables\Calculators\SumDecimalNullable.cs" />
+    <Compile Include="DataTables\Calculators\SumDouble.cs" />
+    <Compile Include="DataTables\Calculators\SumDoubleNullable.cs" />
+    <Compile Include="DataTables\Calculators\SumInt32.cs" />
+    <Compile Include="DataTables\Calculators\SumInt32Nullable.cs" />
+    <Compile Include="DataTables\Calculators\SumInt64.cs" />
+    <Compile Include="DataTables\Calculators\SumInt64Nullable.cs" />
+    <Compile Include="DataTables\Calculators\SumSingleNullable.cs" />
+    <Compile Include="DataTables\Calculators\SumSingle.cs" />
+    <Compile Include="DataTables\Columns\AbstractColumn.cs" />
+    <Compile Include="DataTables\Columns\CalculatorColumn.cs" />
+    <Compile Include="DataTables\GetValueEventAgrs.cs" />
+    <Compile Include="DataTables\ICalculator.cs" />
+    <Compile Include="DataTables\IColumn.cs" />
+    <Compile Include="DataTables\Calculator.cs" />
+    <Compile Include="DataTables\Util.cs" />
+    <Compile Include="DataTables\Calculators\Sum.cs" />
     <Compile Include="EnumDescription.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="IO\IniReader.cs" />
@@ -82,6 +100,9 @@
     <Compile Include="Net\IpAddressExtender.cs" />
     <Compile Include="Net\NetworkException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DataTables\Columns\Column.cs" />
+    <Compile Include="DataTables\ColumnCollection.cs" />
+    <Compile Include="DataTables\DataTable.cs" />
     <Compile Include="Text\AesUtil.cs" />
     <Compile Include="Text\DESHelper.cs" />
     <Compile Include="Text\NamedFormatterHelper.cs" />
