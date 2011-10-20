@@ -8,5 +8,10 @@ namespace Qi.DataTables.Calculators
             : base(Convert.ToInt32, (a, b) => a + b)
         {
         }
+
+        internal static ICalculator Create()
+        {
+            return new SumInt32();
+        }
     }
 }

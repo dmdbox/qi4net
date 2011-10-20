@@ -9,21 +9,22 @@ namespace Qi.DataTables.Columns
     /// <typeparam name="T">T for colum's Value type.</typeparam>
     public abstract class AbstractColumn<T> : IColumn
     {
-        private Dictionary<string, ICalculator<T>> _sets;
+        private object _cacheData;
         private int _rowObjectHasCode;
+        private Dictionary<string, ICalculator> _sets;
 
         protected AbstractColumn(string name)
         {
-            if (name == null)
+            if (String.IsNullOrEmpty(name))
             {
                 throw new ArgumentNullException("name");
             }
             Name = name;
         }
 
-        private Dictionary<string, ICalculator<T>> Sets
+        private Dictionary<string, ICalculator> Sets
         {
-            get { return _sets ?? (_sets = new Dictionary<string, ICalculator<T>>()); }
+            get { return _sets ?? (_sets = new Dictionary<string, ICalculator>()); }
         }
 
         #region IColumn Members
@@ -41,46 +42,40 @@ namespace Qi.DataTables.Columns
             {
                 return Sets["Sum"].Result;
             }
-            throw new ArgumentException(this.Name + "do not set the Sum function.");
-        }
-
-        public void Reset()
-        {
-            cacheData = null;
+            throw new ArgumentException(string.Format("Column {0} do not set the Sum function.", Name));
         }
 
         #endregion
+
+        public void Reset()
+        {
+            _cacheData = null;
+        }
 
         public T GetValue(object data)
         {
             bool sameRowObject = _rowObjectHasCode == data.GetHashCode();
 
-            cacheData = sameRowObject ? cacheData : InvokeObject(data);
+            _cacheData = sameRowObject ? _cacheData : InvokeObject(data);
 
             if (_sets != null && !sameRowObject)
             {
                 _rowObjectHasCode = data.GetHashCode();
                 foreach (var item in Sets.Values)
                 {
-                    item.SetValue(cacheData);
+                    item.SetValue(_cacheData);
                 }
             }
-            return (T)cacheData;
+            return (T) _cacheData;
         }
-        //private object justTest(object rowObject)
-        //{
-        //    Console.WriteLine(this.Name + " InvokeObject Called");
-        //    return InvokeObject(rowObject);
-        //}
+
         protected abstract object InvokeObject(object rowObject);
 
-        public void Add(ICalculator<T> result)
+        public void Add(ICalculator result)
         {
             if (result == null)
                 throw new ArgumentNullException("result");
             Sets.Add(result.Name, result);
         }
-
-        private object cacheData;
     }
 }

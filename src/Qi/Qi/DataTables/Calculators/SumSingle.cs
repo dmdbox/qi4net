@@ -8,5 +8,10 @@ namespace Qi.DataTables.Calculators
             : base(Convert.ToSingle, (a, b) => a + b)
         {
         }
+
+        internal static SumSingle Create()
+        {
+            return new SumSingle();
+        }
     }
 }

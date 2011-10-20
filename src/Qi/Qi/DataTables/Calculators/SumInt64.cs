@@ -7,6 +7,12 @@ namespace Qi.DataTables.Calculators
         public SumInt64()
             : base(Convert.ToInt64, (a, b) => a + b)
         {
+     
+        }
+
+        internal static SumInt64 Create()
+        {
+            return new SumInt64();
         }
     }
 }

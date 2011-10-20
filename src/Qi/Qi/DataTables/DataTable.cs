@@ -1,16 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Qi.DataTables.Calculators;
 using Qi.DataTables.Columns;
 
 namespace Qi.DataTables
 {
-    public class DataTable<T>
+    public interface IDataTable
+    {
+        ColumnCollection Columns { get; }
+        string[] ColumnName { get; }
+        IEnumerable<object[]> Rows { get; }
+        IDataTable SetData(IEnumerable<object> items);
+    }
+
+    public class DataTable<T> : IDataTable
     {
         private ColumnCollection _columns = new ColumnCollection();
 
         private IEnumerable<T> _data;
+
+        #region IDataTable Members
 
         public ColumnCollection Columns
         {
@@ -43,7 +52,14 @@ namespace Qi.DataTables
             }
         }
 
-        
+
+        IDataTable IDataTable.SetData(IEnumerable<object> items)
+        {
+            List<T> a = items.Select(item => (T) item).ToList();
+            return SetData(a);
+        }
+
+        #endregion
 
         public AbstractColumn<TReturnValue> Column<TReturnValue>(string columnName, Func<T, TReturnValue> accessor)
         {
@@ -60,16 +76,12 @@ namespace Qi.DataTables
             return column;
         }
 
-
-        public void SetData(IEnumerable<T> items)
+        public DataTable<T> SetData(IEnumerable<T> items)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
             _data = items;
+            return this;
         }
-
-       
-
-       
     }
 }

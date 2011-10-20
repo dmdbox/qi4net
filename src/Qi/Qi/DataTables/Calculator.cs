@@ -1,41 +1,57 @@
 ﻿using System;
+using System.Collections.Generic;
 using Qi.DataTables.Calculators;
-using Qi.DataTables.Columns;
 
 namespace Qi.DataTables
 {
     public static class Calculator
     {
-        public static AbstractColumn<decimal> ForSum(
-            this AbstractColumn<decimal> column)
+        private static readonly Dictionary<Type, Func<ICalculator>> _sumMap = new Dictionary<Type, Func<ICalculator>>
+                                                                                  {
+                                                                                      {typeof (int), SumInt32.Create},
+                                                                                      {
+                                                                                          typeof (int?),
+                                                                                          SumInt32Nullable.Create
+                                                                                          },
+                                                                                      {typeof (long), SumInt64.Create},
+                                                                                      {
+                                                                                          typeof (long?),
+                                                                                          SumInt64Nullable.Create
+                                                                                          },
+                                                                                      {
+                                                                                          typeof (decimal),
+                                                                                          SumDecimal.Create
+                                                                                          },
+                                                                                      {
+                                                                                          typeof (decimal?),
+                                                                                          SumDecimalNullable.Create
+                                                                                          },
+                                                                                      {
+                                                                                          typeof (Single), SumSingle.Create
+                                                                                          },
+                                                                                      {
+                                                                                          typeof (Single?),
+                                                                                          SumSingleNullable.Create
+                                                                                          },
+                                                                                      {
+                                                                                          typeof (double), SumDouble.Create
+                                                                                          },
+                                                                                      {
+                                                                                          typeof (double?),
+                                                                                          SumDoubleNullable.Create
+                                                                                          },
+                                                                                  };
+
+        public static IColumn Sum<T>(
+            this IColumn column)
         {
-            var result = new SumDecimal();
-            column.Add(result);
+            column.Add(CreateSumCalculator(typeof(T)));
             return column;
         }
 
-        public static AbstractColumn<decimal?> ForSum(
-            this AbstractColumn<decimal?> column)
+        public static ICalculator CreateSumCalculator(Type t)
         {
-            var result = new SumDecimalNullable();
-            column.Add(result);
-            return column;
-        }
-
-        public static AbstractColumn<Int32> ForSum(
-            this AbstractColumn<Int32> column)
-        {
-            var result = new SumInt32();
-            column.Add(result);
-            return column;
-        }
-
-        public static AbstractColumn<Int64> ForSum(
-            this AbstractColumn<Int64> column)
-        {
-            var result = new SumInt64();
-            column.Add(result);
-            return column;
+            return _sumMap[t].Invoke();
         }
     }
 }

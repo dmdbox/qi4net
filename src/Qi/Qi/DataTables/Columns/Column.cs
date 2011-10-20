@@ -17,10 +17,12 @@ namespace Qi.DataTables.Columns
             : base(name)
         {
         }
+
         /// <summary>
         /// 
         /// </summary>
         public Func<T, TReturnValue> Accessor { get; set; }
+
         /// <summary>
         /// 
         /// </summary>
@@ -30,7 +32,7 @@ namespace Qi.DataTables.Columns
         {
             if (Accessor == null)
                 return null;
-            TReturnValue result = Accessor.Invoke((T)rowObject);
+            TReturnValue result = Accessor.Invoke((T) rowObject);
             return result;
         }
     }

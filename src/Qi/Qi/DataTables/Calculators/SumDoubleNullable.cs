@@ -8,6 +8,9 @@ namespace Qi.DataTables.Calculators
         {
         }
 
-        
+        internal static SumDoubleNullable Create()
+        {
+            return new SumDoubleNullable();
+        }
     }
 }

@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Qi.DataTables;
-using Qi.DataTables.Columns;
 
 namespace Qi.Test
 {
@@ -13,12 +13,6 @@ namespace Qi.Test
     [TestClass]
     public class ReporterTest
     {
-        /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext { get; set; }
-
         #region Additional test attributes
 
         // 
@@ -50,7 +44,15 @@ namespace Qi.Test
         //
 
         #endregion
-      
+
+        [TestMethod]
+        public void Build()
+        {
+            decimal? f = 11m;
+            decimal s = Convert.ToInt32(f);
+            Assert.AreEqual(11m, s);
+        }
+
         [TestMethod]
         public void BuildRepoert()
         {
@@ -77,9 +79,9 @@ namespace Qi.Test
             var target = new DataTable<SettlementDetails>();
             target.Column("Name", s => s.Name);
             //計算列
-            AbstractColumn<decimal?> colum4CalculateRow1 = target.Column("Amount0", s => s.Amount).ForSum();
-            AbstractColumn<decimal?> colum4CalculateRow2 = target.Column("Amount1", s => s.Amount1).ForSum();
-            target.Sum("Amount+Amount1", colum4CalculateRow1, colum4CalculateRow2);
+            IColumn colum4CalculateRow1 = target.Column("Amount0", s => s.Amount).Sum<decimal?>();
+            IColumn colum4CalculateRow2 = target.Column("Amount1", s => s.Amount1).Sum<decimal?>();
+            target.Sum<decimal?>("Amount+Amount1", colum4CalculateRow1, colum4CalculateRow2);
 
             target.SetData(items);
 
@@ -102,8 +104,8 @@ namespace Qi.Test
                 index++;
             }
 
-            Assert.AreEqual(items.Sum(item => item.Amount), ((IColumn)colum4CalculateRow1).Sum());
-            Assert.AreEqual(items.Sum(item => item.Amount1), ((IColumn)colum4CalculateRow2).Sum());
+            Assert.AreEqual(items.Sum(item => item.Amount), (colum4CalculateRow1).SumResult());
+            Assert.AreEqual(items.Sum(item => item.Amount1), (colum4CalculateRow2).SumResult());
         }
 
         #region Nested type: SettlementDetails

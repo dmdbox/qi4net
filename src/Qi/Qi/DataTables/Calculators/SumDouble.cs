@@ -8,5 +8,10 @@ namespace Qi.DataTables.Calculators
             : base(Convert.ToDouble, (a, b) => a + b)
         {
         }
+
+        internal static SumDouble Create()
+        {
+            return new SumDouble();
+        }
     }
 }

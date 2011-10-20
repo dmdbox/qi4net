@@ -7,5 +7,10 @@ namespace Qi.DataTables.Calculators
         public SumDecimalNullable():base(s=>Convert.ToDecimal(s),(a,b)=>(a ?? 0) + (b ?? 0))
         {
         }
+
+        internal static SumDecimalNullable Create()
+        {
+            return new SumDecimalNullable();
+        }
     }
 }

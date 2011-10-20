@@ -1,10 +1,10 @@
 namespace Qi.DataTables
 {
-    public interface ICalculator<T>
+    public interface ICalculator
     {
         string Name { get; }
 
-        T Result { get; }
+        object Result { get; }
 
         /// <summary>
         /// set value to this object for calculate;

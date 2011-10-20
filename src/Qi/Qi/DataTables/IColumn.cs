@@ -10,7 +10,9 @@ namespace Qi.DataTables
 
         object SumResult();
 
-       
+        void Add(ICalculator calculator);
+
+
 
     }
 }

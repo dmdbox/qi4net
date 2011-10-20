@@ -2,10 +2,10 @@
 {
     public class CalculatorColumn<TReturnValue> : AbstractColumn<TReturnValue>
     {
-        private readonly ICalculator<TReturnValue> _calculator;
+        private readonly ICalculator _calculator;
         private readonly IColumn[] _columns;
 
-        public CalculatorColumn(string name, ICalculator<TReturnValue> calculator, IColumn[] columns)
+        public CalculatorColumn(string name, ICalculator calculator, IColumn[] columns)
             : base(name)
         {
             _calculator = calculator;
@@ -18,7 +18,7 @@
             {
                 _calculator.SetValue(col.GetValue(rowObject));
             }
-            TReturnValue result = _calculator.Result;
+            var result = (TReturnValue)_calculator.Result;
             _calculator.Clear();
             return result;
         }

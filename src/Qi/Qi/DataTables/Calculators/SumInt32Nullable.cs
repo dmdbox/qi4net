@@ -8,5 +8,10 @@ namespace Qi.DataTables.Calculators
             : base(s => Convert.ToInt32(s), (a, b) => (a ?? 0) + (b ?? 0))
         {
         }
+
+        internal static SumInt32Nullable Create()
+        {
+            return new SumInt32Nullable();
+        }
     }
 }
