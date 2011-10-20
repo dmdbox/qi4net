@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationHelper.cs" />
+    <Compile Include="DataTables\Expressions.cs" />
     <Compile Include="DataTables\Calculators\SumDecimal.cs" />
     <Compile Include="DataTables\Calculators\SumDecimalNullable.cs" />
     <Compile Include="DataTables\Calculators\SumDouble.cs" />

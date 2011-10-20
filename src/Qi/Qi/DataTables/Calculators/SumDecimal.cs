@@ -1,10 +1,12 @@
+using System;
+
 namespace Qi.DataTables.Calculators
 {
     internal class SumDecimal : Sum<decimal>
     {
-        protected override decimal Calculate(decimal lastData, decimal rowValue)
+        public SumDecimal()
+            : base(Convert.ToDecimal, (a, b) => a + b)
         {
-            return lastData + rowValue;
         }
     }
 }

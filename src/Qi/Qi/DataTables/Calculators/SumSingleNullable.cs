@@ -4,9 +4,9 @@ namespace Qi.DataTables.Calculators
 {
     internal class SumSingleNullable : Sum<float?>
     {
-        protected override Single? Calculate(Single? lastData, Single? rowValue)
+        public SumSingleNullable()
+            : base(s => Convert.ToInt64(s), (a, b) => (a ?? 0) + (b ?? 0))
         {
-            return (lastData ?? 0) + (rowValue ?? 0);
         }
     }
 }

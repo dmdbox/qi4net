@@ -1,33 +1,49 @@
+using System;
+
 namespace Qi.DataTables.Calculators
 {
-    internal abstract class Sum<T> : ICalculator<T>
+    internal abstract class CalculatorBase<T> : ICalculator<T>
     {
-        protected T LastResult;
+        private readonly Func<T, T, T> _calculate;
+        private readonly Func<object, T> _convertor;
+
+        protected CalculatorBase(Func<object, T> convertor, Func<T, T, T> calculate)
+        {
+            if (convertor == null) throw new ArgumentNullException("convertor");
+            if (calculate == null) throw new ArgumentNullException("calculate");
+            _convertor = convertor;
+            _calculate = calculate;
+        }
 
         #region ICalculator<T> Members
 
-        public string Name
-        {
-            get { return "Sum"; }
-        }
+        public abstract string Name { get; }
 
-        public T Result
-        {
-            get { return LastResult; }
-        }
+        public T Result { get; private set; }
 
-        public void SetValue(object rowObject, T rowValue)
+        public void SetValue(object rowValue)
         {
-            LastResult = Calculate(LastResult, rowValue);
+            Result = _calculate(Result, _convertor(rowValue));
         }
 
         public void Clear()
         {
-            LastResult = default(T);
+            Result = default(T);
         }
 
         #endregion
+    }
 
-        protected abstract T Calculate(T lastData, T rowValue);
+    internal abstract class Sum<T> : CalculatorBase<T>
+    {
+        protected Sum(Func<object, T> convertor, Func<T, T, T> calculate)
+            : base(convertor, calculate)
+        {
+        }
+
+        public override string Name
+        {
+            get { return "Sum"; }
+        }
     }
 }

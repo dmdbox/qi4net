@@ -8,7 +8,7 @@ namespace Qi.DataTables
 
         object GetValue(object data);
 
-        object Sum();
+        object SumResult();
 
        
 

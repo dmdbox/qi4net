@@ -5,12 +5,13 @@ namespace Qi.DataTables
         string Name { get; }
 
         T Result { get; }
+
         /// <summary>
         /// set value to this object for calculate;
         /// </summary>
-        /// <param name="rowObject"></param>
         /// <param name="rowValue"></param>
-        void SetValue(object rowObject, T rowValue);
+        void SetValue(object rowValue);
+
         /// <summary>
         /// 
         /// </summary>

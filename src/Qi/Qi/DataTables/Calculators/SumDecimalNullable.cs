@@ -4,9 +4,8 @@ namespace Qi.DataTables.Calculators
 {
     internal class SumDecimalNullable : Sum<decimal?>
     {
-        protected override Decimal? Calculate(Decimal? lastData, Decimal? rowValue)
+        public SumDecimalNullable():base(s=>Convert.ToDecimal(s),(a,b)=>(a ?? 0) + (b ?? 0))
         {
-            return (lastData ?? 0) + (rowValue ?? 0);
         }
     }
 }

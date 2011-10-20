@@ -4,9 +4,9 @@ namespace Qi.DataTables.Calculators
 {
     internal class SumInt64Nullable : Sum<long?>
     {
-        protected override Int64? Calculate(Int64? lastData, Int64? rowValue)
+        public SumInt64Nullable()
+            : base(s => Convert.ToInt64(s), (a, b) => (a ?? 0) + (b ?? 0))
         {
-            return (lastData ?? 0) + (rowValue ?? 0);
         }
     }
 }

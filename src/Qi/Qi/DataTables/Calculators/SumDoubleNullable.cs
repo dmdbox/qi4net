@@ -4,9 +4,10 @@ namespace Qi.DataTables.Calculators
 {
     internal class SumDoubleNullable : Sum<double?>
     {
-        protected override Double? Calculate(Double? lastData, Double? rowValue)
+        public SumDoubleNullable():base(s=>Convert.ToDouble(s),(a,b)=>(a ?? 0) + (b ?? 0))
         {
-            return (lastData ?? 0) + (rowValue ?? 0);
         }
+
+        
     }
 }

@@ -15,7 +15,7 @@ namespace Qi.DataTables
         }
 
         public static AbstractColumn<decimal?> ForSum(
-           this AbstractColumn<decimal?> column)
+            this AbstractColumn<decimal?> column)
         {
             var result = new SumDecimalNullable();
             column.Add(result);

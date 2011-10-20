@@ -16,7 +16,7 @@
         {
             foreach (IColumn col in _columns)
             {
-                _calculator.SetValue(rowObject, (TReturnValue) col.GetValue(rowObject));
+                _calculator.SetValue(col.GetValue(rowObject));
             }
             TReturnValue result = _calculator.Result;
             _calculator.Clear();

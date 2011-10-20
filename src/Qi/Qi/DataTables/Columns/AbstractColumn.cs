@@ -35,7 +35,7 @@ namespace Qi.DataTables.Columns
             return GetValue(data);
         }
 
-        object IColumn.Sum()
+        object IColumn.SumResult()
         {
             if (Sets.ContainsKey("Sum"))
             {
@@ -62,7 +62,7 @@ namespace Qi.DataTables.Columns
                 _rowObjectHasCode = data.GetHashCode();
                 foreach (var item in Sets.Values)
                 {
-                    item.SetValue(data, (T)cacheData);
+                    item.SetValue(cacheData);
                 }
             }
             return (T)cacheData;

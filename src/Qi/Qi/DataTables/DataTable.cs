@@ -9,17 +9,18 @@ namespace Qi.DataTables
     public class DataTable<T>
     {
         private ColumnCollection _columns = new ColumnCollection();
+
         private IEnumerable<T> _data;
 
         public ColumnCollection Columns
         {
-            get
-            {
-                return _columns ?? (_columns = new ColumnCollection());
-            }
+            get { return _columns ?? (_columns = new ColumnCollection()); }
         }
 
-
+        public string[] ColumnName
+        {
+            get { return (from v in Columns select v.Name).ToArray(); }
+        }
 
         public IEnumerable<object[]> Rows
         {
@@ -42,6 +43,7 @@ namespace Qi.DataTables
             }
         }
 
+        
 
         public AbstractColumn<TReturnValue> Column<TReturnValue>(string columnName, Func<T, TReturnValue> accessor)
         {
@@ -53,7 +55,7 @@ namespace Qi.DataTables
             {
                 throw new ArgumentOutOfRangeException(columnName + " is duplicate column name.");
             }
-            var column = new Column<T, TReturnValue>(columnName) { Accessor = accessor };
+            var column = new Column<T, TReturnValue>(columnName) {Accessor = accessor};
             Columns.Add(column);
             return column;
         }
@@ -65,50 +67,9 @@ namespace Qi.DataTables
                 throw new ArgumentNullException("items");
             _data = items;
         }
-        private T[] GetColumns<T>(params string[] columnNames) where T : class
-        {
-            return columnNames.Select(a => (T)this.Columns[a]).ToArray();
-        }
 
-        public AbstractColumn<decimal> SumDecimal(string columnName, params string[] columnNames)
-        {
-            var columns = GetColumns<AbstractColumn<decimal>>(columnNames);
-            return this.Sum(columnName, columns);
-        }
+       
 
-        public AbstractColumn<decimal> Sum(string columnName, params AbstractColumn<Decimal>[] columns)
-        {
-            var column = new CalculatorColumn<decimal>(columnName, new SumDecimal(), columns);
-            Columns.Add(column);
-            return column;
-        }
-
-        public AbstractColumn<decimal?> Sum(string columnName, params AbstractColumn<Decimal?>[] columns)
-        {
-            var column = new CalculatorColumn<decimal?>(columnName, new SumDecimalNullable(), columns);
-            Columns.Add(column);
-            return column;
-        }
-
-        public AbstractColumn<decimal?> SumDecimalNullable(string columnName, params string[] columnNames)
-        {
-            var columns = GetColumns<AbstractColumn<decimal?>>(columnNames);
-            return this.Sum(columnName, columns);
-        }
-
-
-        public AbstractColumn<Int32> Sum(string columnName, params AbstractColumn<Int32>[] columns)
-        {
-            var column = new CalculatorColumn<Int32>(columnName, new SumInt32(), columns);
-            Columns.Add(column);
-            return column;
-        }
-
-        public AbstractColumn<Int32?> Sum(string columnName, params AbstractColumn<Int32?>[] columns)
-        {
-            var column = new CalculatorColumn<Int32?>(columnName, new SumInt32Nullable(), columns);
-            Columns.Add(column);
-            return column;
-        }
+       
     }
 }
