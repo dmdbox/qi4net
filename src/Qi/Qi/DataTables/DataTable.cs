@@ -18,6 +18,7 @@ namespace Qi.DataTables
             get { return _columns ?? (_columns = new ColumnCollection()); }
         }
 
+
         public string[] ColumnNames
         {
             get { return (from v in Columns select v.Name).ToArray(); }
@@ -57,7 +58,7 @@ namespace Qi.DataTables
         }
 
 
-        public bool HasRow
+        public bool HasRows
         {
             get { return _data != null && _data.Any(); }
         }
