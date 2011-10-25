@@ -5,14 +5,6 @@ using Qi.DataTables.Columns;
 
 namespace Qi.DataTables
 {
-    public interface IDataTable
-    {
-        ColumnCollection Columns { get; }
-        string[] ColumnNames { get; }
-        IEnumerable<object[]> GetRows();
-        IDataTable SetData(IEnumerable<object> items);
-    }
-
     public class DataTable<T> : IDataTable
     {
         private ColumnCollection _columns = new ColumnCollection();
@@ -60,8 +52,14 @@ namespace Qi.DataTables
 
         IDataTable IDataTable.SetData(IEnumerable<object> items)
         {
-            List<T> a = items.Select(item => (T) item).ToList();
+            List<T> a = items.Select(item => (T)item).ToList();
             return SetData(a);
+        }
+
+
+        public bool HasRow
+        {
+            get { return _data != null && _data.Any(); }
         }
 
         #endregion
@@ -76,7 +74,7 @@ namespace Qi.DataTables
             {
                 throw new ArgumentOutOfRangeException(columnName + " is duplicate column name.");
             }
-            var column = new Column<T, TReturnValue>(columnName) {Accessor = accessor};
+            var column = new Column<T, TReturnValue>(columnName) { Accessor = accessor };
             Columns.Add(column);
             return column;
         }

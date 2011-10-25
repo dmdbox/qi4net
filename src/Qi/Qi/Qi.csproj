@@ -93,6 +93,7 @@
     <Compile Include="DataTables\ICalculator.cs" />
     <Compile Include="DataTables\IColumn.cs" />
     <Compile Include="DataTables\Calculator.cs" />
+    <Compile Include="DataTables\IDataTable.cs" />
     <Compile Include="DataTables\Util.cs" />
     <Compile Include="DataTables\Calculators\Sum.cs" />
     <Compile Include="EnumDescription.cs" />
