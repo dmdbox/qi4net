@@ -14,4 +14,5 @@ namespace Qi.DataTables.Calculators.Sums
             return new SumInt32();
         }
     }
+   
 }

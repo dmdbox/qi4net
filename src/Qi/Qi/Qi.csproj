@@ -75,6 +75,10 @@
   <ItemGroup>
     <Compile Include="ApplicationHelper.cs" />
     <Compile Include="DataTables\Calculators\CalculatorBase.cs" />
+    <Compile Include="DataTables\Calculators\Avgs\AvgDecimal.cs" />
+    <Compile Include="DataTables\Calculators\Avgs\AvgDecimalNullable.cs" />
+    <Compile Include="DataTables\Calculators\Avgs\AvgDouble.cs" />
+    <Compile Include="DataTables\Calculators\Avgs\AvgDoubleNullable.cs" />
     <Compile Include="DataTables\Columns\ReferenceColumn.cs" />
     <Compile Include="DataTables\Expressions.cs" />
     <Compile Include="DataTables\Calculators\Sums\SumDecimal.cs" />

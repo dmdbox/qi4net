@@ -16,7 +16,7 @@ namespace Qi.DataTables.Calculators
             _calculate = calculate;
         }
 
-        public T Result { get; private set; }
+        public virtual T Result { get; private set; }
 
         #region ICalculator Members
 
@@ -27,7 +27,7 @@ namespace Qi.DataTables.Calculators
             get { return Result; }
         }
 
-        public void SetValue(object rowValue)
+        public virtual void SetValue(object rowValue)
         {
             Result = _calculate(Result, _convertor(rowValue));
         }

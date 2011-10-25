@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Qi.DataTables.Calculators;
+using Qi.DataTables.Calculators.Avgs;
 using Qi.DataTables.Calculators.Sums;
 
 namespace Qi.DataTables
@@ -21,12 +22,35 @@ namespace Qi.DataTables
                                                                                       {typeof (double?),SumDoubleNullable.Create},
                                                                                   };
 
+        private static readonly Dictionary<Type, Func<ICalculator>> AvgMap = new Dictionary<Type, Func<ICalculator>>
+                                                                                  {
+                                                                                      {typeof (int), AvgDecimal.Create},
+                                                                                      {typeof (int?),AvgDecimalNullable.Create},
+                                                                                      {typeof (long), AvgDecimal.Create},
+                                                                                      {typeof (long?),AvgDecimalNullable.Create},
+                                                                                      {typeof (decimal),AvgDecimal.Create},
+                                                                                      {typeof (decimal?),AvgDecimalNullable.Create},
+                                                                                      {typeof (Single),AvgDecimal.Create},
+                                                                                      {typeof (Single?),AvgDecimalNullable.Create},
+                                                                                      {typeof (double),AvgDecimal.Create},
+                                                                                      {typeof (double?),AvgDecimalNullable.Create},
+                                                                                  };
+
         public static IColumn Sum<T>(this IColumn column)
         {
             column.Add(CreateSumCalculator(typeof (T)));
             return column;
         }
 
+        public static IColumn Avg<T>(this IColumn column)
+        {
+            column.Add(CreateAvgCalculator(typeof(T)));
+            return column;
+        }
+        public static ICalculator CreateAvgCalculator(Type t)
+        {
+            return AvgMap[t].Invoke();
+        }
         public static ICalculator CreateSumCalculator(Type t)
         {
             return SumMap[t].Invoke();
