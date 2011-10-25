@@ -3,6 +3,9 @@ using Qi.DataTables.Columns;
 
 namespace Qi.DataTables
 {
+    /// <summary>
+    /// calulate multi column in a row.
+    /// </summary>
     public static class Expressions
     {
         public static IColumn[] GetColumns(this IDataTable table, params string[] columnNames)
@@ -14,7 +17,7 @@ namespace Qi.DataTables
                                                 params IColumn[] columns)
         {
             var column = new CalculatorColumn<TColumnValue>(columnName,
-                                                            Calculator.CreateSumCalculator(typeof (TColumnValue)),
+                                                            Calculator.CreateSumCalculator(typeof(TColumnValue)),
                                                             columns);
             table.Columns.Add(column);
             return column;
@@ -26,7 +29,7 @@ namespace Qi.DataTables
         {
             IColumn[] columns = table.GetColumns(columnNames);
             var column = new CalculatorColumn<TReturnValue>(columnName,
-                                                            Calculator.CreateSumCalculator(typeof (TReturnValue)),
+                                                            Calculator.CreateSumCalculator(typeof(TReturnValue)),
                                                             columns);
             table.Columns.Add(column);
             return column;

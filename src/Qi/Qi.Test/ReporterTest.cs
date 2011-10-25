@@ -54,6 +54,21 @@ namespace Qi.Test
         }
 
         [TestMethod]
+        public void BuildRepoert_empty()
+        {
+            var target = new DataTable<SettlementDetails>();
+            target.Column("Name", s => s.Name);
+            //計算列
+            IColumn colum4CalculateRow1 = target.Column("Amount0", s => s.Amount).Sum<decimal?>();
+            IColumn colum4CalculateRow2 = target.Column("Amount1", s => s.Amount1).Sum<decimal?>();
+            target.Sum<decimal?>("Amount+Amount1", colum4CalculateRow1, colum4CalculateRow2);
+
+            target.SetData(new List<SettlementDetails>());
+            target.GetRows();
+            Assert.AreEqual(null, colum4CalculateRow1.SumResult());
+        }
+
+        [TestMethod]
         public void BuildRepoert()
         {
             var items = new List<SettlementDetails>
@@ -85,7 +100,7 @@ namespace Qi.Test
 
             target.SetData(items);
 
-            var columns = new[] { "Name", "Amount0", "Amount1", "Amount+Amount1" };
+            var columns = new[] {"Name", "Amount0", "Amount1", "Amount+Amount1"};
             int index = 0;
             //check column Name;
             foreach (IColumn column in target.Columns)
@@ -95,7 +110,7 @@ namespace Qi.Test
             }
             //check the row item0;
             index = 0;
-            foreach (var item in target.Rows)
+            foreach (var item in target.GetRows())
             {
                 Assert.AreEqual(items[index].Name, item[0]);
                 Assert.AreEqual(items[index].Amount, item[1]);

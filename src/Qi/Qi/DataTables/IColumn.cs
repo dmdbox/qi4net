@@ -12,6 +12,11 @@ namespace Qi.DataTables
 
         void Add(ICalculator calculator);
 
+        void Clear();
+        /// <summary>
+        /// Reset result of the calulators
+        /// </summary>
+        void Reset();
 
 
     }

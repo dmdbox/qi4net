@@ -1,6 +1,6 @@
 using System;
 
-namespace Qi.DataTables.Calculators
+namespace Qi.DataTables.Calculators.Sums
 {
     internal class SumDecimal : Sum<decimal>
     {

@@ -45,12 +45,34 @@ namespace Qi.DataTables.Columns
             throw new ArgumentException(string.Format("Column {0} do not set the Sum function.", Name));
         }
 
-        #endregion
-
+        /// <summary>
+        /// Reset all the result include calculator
+        /// </summary>
         public void Reset()
         {
             _cacheData = null;
+            foreach (ICalculator a in Sets.Values)
+            {
+                a.Clear();
+            }
         }
+
+        /// <summary>
+        /// clear the reference of the <see cref="T"/>,because it may be object.
+        /// </summary>
+        public void Clear()
+        {
+            _cacheData = null;
+        }
+
+        public void Add(ICalculator result)
+        {
+            if (result == null)
+                throw new ArgumentNullException("result");
+            Sets.Add(result.Name, result);
+        }
+
+        #endregion
 
         public T GetValue(object data)
         {
@@ -61,7 +83,7 @@ namespace Qi.DataTables.Columns
             if (_sets != null && !sameRowObject)
             {
                 _rowObjectHasCode = data.GetHashCode();
-                foreach (var item in Sets.Values)
+                foreach (ICalculator item in Sets.Values)
                 {
                     item.SetValue(_cacheData);
                 }
@@ -70,12 +92,5 @@ namespace Qi.DataTables.Columns
         }
 
         protected abstract object InvokeObject(object rowObject);
-
-        public void Add(ICalculator result)
-        {
-            if (result == null)
-                throw new ArgumentNullException("result");
-            Sets.Add(result.Name, result);
-        }
     }
 }

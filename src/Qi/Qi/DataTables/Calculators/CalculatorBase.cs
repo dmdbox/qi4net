@@ -9,17 +9,23 @@ namespace Qi.DataTables.Calculators
 
         protected CalculatorBase(Func<object, T> convertor, Func<T, T, T> calculate)
         {
-            if (convertor == null) throw new ArgumentNullException("convertor");
+            if (convertor == null)
+                throw new ArgumentNullException("convertor");
             if (calculate == null) throw new ArgumentNullException("calculate");
             _convertor = convertor;
             _calculate = calculate;
         }
 
-        #region ICalculator<T> Members
+        public T Result { get; private set; }
+
+        #region ICalculator Members
 
         public abstract string Name { get; }
-        object ICalculator.Result { get { return this.Result; } }
-        public T Result { get; private set; }
+
+        object ICalculator.Result
+        {
+            get { return Result; }
+        }
 
         public void SetValue(object rowValue)
         {

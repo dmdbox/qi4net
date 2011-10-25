@@ -8,8 +8,8 @@ namespace Qi.DataTables
     public interface IDataTable
     {
         ColumnCollection Columns { get; }
-        string[] ColumnName { get; }
-        IEnumerable<object[]> Rows { get; }
+        string[] ColumnNames { get; }
+        IEnumerable<object[]> GetRows();
         IDataTable SetData(IEnumerable<object> items);
     }
 
@@ -26,30 +26,35 @@ namespace Qi.DataTables
             get { return _columns ?? (_columns = new ColumnCollection()); }
         }
 
-        public string[] ColumnName
+        public string[] ColumnNames
         {
             get { return (from v in Columns select v.Name).ToArray(); }
         }
 
-        public IEnumerable<object[]> Rows
+        /// <summary>
+        /// 獲取所有的Rows
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<object[]> GetRows()
         {
-            get
+            var result = new List<object[]>();
+            if (_data != null)
             {
-                var result = new List<object[]>();
-                if (_data != null)
+                foreach (T data in _data)
                 {
-                    foreach (T data in _data)
+                    var item = new object[_columns.Count];
+                    for (int index = 0; index < Columns.Count; index++)
                     {
-                        var item = new object[_columns.Count];
-                        for (int index = 0; index < Columns.Count; index++)
-                        {
-                            item[index] = Columns[index].GetValue(data);
-                        }
-                        result.Add(item);
+                        item[index] = Columns[index].GetValue(data);
                     }
+                    result.Add(item);
                 }
-                return result;
             }
+            foreach (IColumn column in Columns)
+            {
+                column.Clear();
+            }
+            return result;
         }
 
 
@@ -61,7 +66,7 @@ namespace Qi.DataTables
 
         #endregion
 
-        public AbstractColumn<TReturnValue> Column<TReturnValue>(string columnName, Func<T, TReturnValue> accessor)
+        public IColumn Column<TReturnValue>(string columnName, Func<T, TReturnValue> accessor)
         {
             if (columnName == null)
                 throw new ArgumentNullException("columnName");
