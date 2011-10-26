@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Qi.DataTables.Columns
 {
@@ -24,7 +21,7 @@ namespace Qi.DataTables.Columns
 
         protected override object InvokeObject(object rowObject)
         {
-            if (_showCondition((T)rowObject))
+            if (_showCondition((T) rowObject))
             {
                 return _reference.GetValue(rowObject);
             }

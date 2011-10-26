@@ -65,6 +65,21 @@ namespace Qi.DataTables
 
         #endregion
 
+        public object[] GetSummaries(string calculatorName)
+        {
+            var result = new object[Columns.Count];
+            int index = 0;
+            foreach (IColumn column in Columns)
+            {
+                if (column.HasCaculator(calculatorName))
+                {
+                    result[index] = column.GetResult(calculatorName);
+                }
+                index++;
+            }
+            return result;
+        }
+
         public IColumn Column<TReturnValue>(string columnName, Func<T, TReturnValue> accessor)
         {
             if (columnName == null)

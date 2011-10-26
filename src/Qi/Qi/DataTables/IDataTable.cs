@@ -32,5 +32,7 @@ namespace Qi.DataTables
         /// <param name="items"></param>
         /// <returns></returns>
         IDataTable SetData(IEnumerable<object> items);
+
+        object[] GetSummaries(string calculatorName);
     }
 }

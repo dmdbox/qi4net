@@ -35,12 +35,34 @@ namespace Qi.DataTables.Columns
         {
             return GetValue(data);
         }
-
-        object IColumn.SumResult()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="calculatorName"></param>
+        /// <returns></returns>
+        public bool HasCaculator(string calculatorName)
         {
-            if (Sets.ContainsKey("Sum"))
+            return Sets.ContainsKey(calculatorName);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="calculatorName"></param>
+        /// <returns></returns>
+        public object GetResult(string calculatorName)
+        {
+            if (Sets.ContainsKey(calculatorName))
             {
-                return Sets["Sum"].Result;
+                return Sets[calculatorName].Result;
+            }
+            return null;
+        }
+
+        public object SumResult()
+        {
+            if (HasCaculator("Sum"))
+            {
+                return GetResult("Sum");
             }
             throw new ArgumentException(string.Format("Column {0} do not set the Sum function.", Name));
         }

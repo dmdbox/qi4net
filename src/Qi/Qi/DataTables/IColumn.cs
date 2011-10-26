@@ -1,5 +1,3 @@
-using System;
-
 namespace Qi.DataTables
 {
     public interface IColumn
@@ -8,16 +6,18 @@ namespace Qi.DataTables
 
         object GetValue(object data);
 
+        bool HasCaculator(string calculatorName);
+        object GetResult(string calculatorName);
+        
         object SumResult();
 
         void Add(ICalculator calculator);
 
         void Clear();
+
         /// <summary>
         /// Reset result of the calulators
         /// </summary>
         void Reset();
-
-
     }
 }

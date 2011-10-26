@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Qi.DataTables.Columns;
 
 namespace Qi.DataTables
@@ -17,7 +18,7 @@ namespace Qi.DataTables
                                                 params IColumn[] columns)
         {
             var column = new CalculatorColumn<TColumnValue>(columnName,
-                                                            Calculator.CreateSumCalculator(typeof(TColumnValue)),
+                                                            Calculator.CreateSumCalculator(typeof (TColumnValue)),
                                                             columns);
             table.Columns.Add(column);
             return column;
@@ -29,8 +30,19 @@ namespace Qi.DataTables
         {
             IColumn[] columns = table.GetColumns(columnNames);
             var column = new CalculatorColumn<TReturnValue>(columnName,
-                                                            Calculator.CreateSumCalculator(typeof(TReturnValue)),
+                                                            Calculator.CreateSumCalculator(typeof (TReturnValue)),
                                                             columns);
+            table.Columns.Add(column);
+            return column;
+        }
+
+        public static IColumn Column<TReturnVaue>(this IDataTable table, string columnName,
+                                                  Func<IColumn[], TReturnVaue> customeFunc,
+                                                  params string[] columnNames)
+        {
+            IColumn[] columns = table.GetColumns(columnNames);
+
+            var column = new CustomeCalculatorColumn<TReturnVaue>(columnName, customeFunc, columns);
             table.Columns.Add(column);
             return column;
         }

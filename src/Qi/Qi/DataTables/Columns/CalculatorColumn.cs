@@ -1,6 +1,6 @@
 ﻿namespace Qi.DataTables.Columns
 {
-    public class CalculatorColumn<TReturnValue> : AbstractColumn<TReturnValue>
+    internal class CalculatorColumn<TReturnValue> : AbstractColumn<TReturnValue>
     {
         private readonly ICalculator _calculator;
         private readonly IColumn[] _columns;
@@ -18,7 +18,7 @@
             {
                 _calculator.SetValue(col.GetValue(rowObject));
             }
-            var result = (TReturnValue)_calculator.Result;
+            var result = (TReturnValue) _calculator.Result;
             _calculator.Clear();
             return result;
         }
