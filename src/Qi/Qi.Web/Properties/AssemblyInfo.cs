@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Qi.Web")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("lqz.leo@gmail.com")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Qi.Web")]
-[assembly: AssemblyCopyright("Copyright © lqz.leo 2011")]
+[assembly: AssemblyCopyright("licensed under MIT")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

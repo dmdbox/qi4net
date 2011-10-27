@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 
 [assembly: AssemblyTitle("Qi")]
-[assembly: AssemblyDescription("Qi a tools for developer")]
+[assembly: AssemblyDescription("Nothing")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("lqz.leo@gmail.com")]
+[assembly: AssemblyCompany("Qi")]
 [assembly: AssemblyProduct("Qi")]
-[assembly: AssemblyCopyright("Copyright © lqz 2010")]
+[assembly: AssemblyCopyright("licensed under MIT")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
