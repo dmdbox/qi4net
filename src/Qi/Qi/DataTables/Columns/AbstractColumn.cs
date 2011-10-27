@@ -11,7 +11,7 @@ namespace Qi.DataTables.Columns
     {
         private object _cacheData;
         private int _rowObjectHasCode;
-        private Dictionary<string, ICalculator> _sets;
+        private SortedDictionary<string, ICalculator> _sets;
 
         protected AbstractColumn(string name)
         {
@@ -22,9 +22,9 @@ namespace Qi.DataTables.Columns
             Name = name;
         }
 
-        private Dictionary<string, ICalculator> Sets
+        private IDictionary<string, ICalculator> Sets
         {
-            get { return _sets ?? (_sets = new Dictionary<string, ICalculator>()); }
+            get { return _sets ?? (_sets = new SortedDictionary<string, ICalculator>()); }
         }
 
         #region IColumn Members
@@ -54,6 +54,20 @@ namespace Qi.DataTables.Columns
             if (Sets.ContainsKey(calculatorName))
             {
                 return Sets[calculatorName].Result;
+            }
+            return null;
+        }
+
+        public object GetResult(int calculatorIndex)
+        {
+            if (_sets == null)
+                return null;
+            int i = 0;
+            foreach (var item in _sets.Values)
+            {
+                if (i == calculatorIndex)
+                    return item.Result;
+                i++;
             }
             return null;
         }
@@ -110,7 +124,7 @@ namespace Qi.DataTables.Columns
                     item.SetValue(_cacheData);
                 }
             }
-            return (T) _cacheData;
+            return (T)_cacheData;
         }
 
         protected abstract object InvokeObject(object rowObject);

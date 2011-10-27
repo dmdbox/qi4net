@@ -53,7 +53,7 @@ namespace Qi.DataTables
 
         IDataTable IDataTable.SetData(IEnumerable<object> items)
         {
-            List<T> a = items.Select(item => (T)item).ToList();
+            List<T> a = items.Select(item => (T) item).ToList();
             return SetData(a);
         }
 
@@ -62,8 +62,6 @@ namespace Qi.DataTables
         {
             get { return _data != null && _data.Any(); }
         }
-
-        #endregion
 
         public object[] GetSummaries(string calculatorName)
         {
@@ -80,6 +78,23 @@ namespace Qi.DataTables
             return result;
         }
 
+        #endregion
+        public object[] GetSummaries()
+        {
+            return GetSummaries(0);
+        }
+        public object[] GetSummaries(int calculatorIndex)
+        {
+            var result = new object[Columns.Count];
+            int index = 0;
+            foreach (IColumn column in Columns)
+            {
+                result[index] = column.GetResult(calculatorIndex);
+                index++;
+            }
+            return result;
+        }
+
         public IColumn Column<TReturnValue>(string columnName, Func<T, TReturnValue> accessor)
         {
             if (columnName == null)
@@ -90,7 +105,7 @@ namespace Qi.DataTables
             {
                 throw new ArgumentOutOfRangeException(columnName + " is duplicate column name.");
             }
-            var column = new Column<T, TReturnValue>(columnName) { Accessor = accessor };
+            var column = new Column<T, TReturnValue>(columnName) {Accessor = accessor};
             Columns.Add(column);
             return column;
         }
