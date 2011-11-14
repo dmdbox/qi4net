@@ -9,11 +9,24 @@ namespace Qi.DataTables
     /// </summary>
     public static class Expressions
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="columnNames"></param>
+        /// <returns></returns>
         public static IColumn[] GetColumns(this IDataTable table, params string[] columnNames)
         {
             return columnNames.Select(name => table.Columns[name]).ToArray();
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TColumnValue"></typeparam>
+        /// <param name="table"></param>
+        /// <param name="columnName"></param>
+        /// <param name="columns"></param>
+        /// <returns></returns>
         public static IColumn Sum<TColumnValue>(this IDataTable table, string columnName,
                                                 params IColumn[] columns)
         {
@@ -24,7 +37,14 @@ namespace Qi.DataTables
             return column;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TReturnValue"></typeparam>
+        /// <param name="table"></param>
+        /// <param name="columnName"></param>
+        /// <param name="columnNames"></param>
+        /// <returns></returns>
         public static IColumn Sum<TReturnValue>(this IDataTable table, string columnName,
                                                 params string[] columnNames)
         {
@@ -35,7 +55,15 @@ namespace Qi.DataTables
             table.Columns.Add(column);
             return column;
         }
-
+        /// <summary>
+        /// 创建一个列，这个列的结果由其他列组合而成的。有方法<see cref="customeFunc"/>计算结果
+        /// </summary>
+        /// <typeparam name="TReturnVaue">计算结果的类型</typeparam>
+        /// <param name="table">数据</param>
+        /// <param name="columnName">列的名称</param>
+        /// <param name="customeFunc">计算结果列的方法</param>
+        /// <param name="columnNames">这个列有哪些列计算而成</param>
+        /// <returns></returns>
         public static IColumn Column<TReturnVaue>(this IDataTable table, string columnName,
                                                   Func<IColumn[], TReturnVaue> customeFunc,
                                                   params string[] columnNames)

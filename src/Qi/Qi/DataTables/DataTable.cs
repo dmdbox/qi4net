@@ -5,6 +5,10 @@ using Qi.DataTables.Columns;
 
 namespace Qi.DataTables
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class DataTable<T> : IDataTable
     {
         private ColumnCollection _columns = new ColumnCollection();
@@ -13,12 +17,17 @@ namespace Qi.DataTables
 
         #region IDataTable Members
 
+        /// <summary>
+        /// 
+        /// </summary>
         public ColumnCollection Columns
         {
             get { return _columns ?? (_columns = new ColumnCollection()); }
         }
 
-
+        /// <summary>
+        /// 获取所有的Columns
+        /// </summary>
         public string[] ColumnNames
         {
             get { return (from v in Columns select v.Name).ToArray(); }
@@ -30,13 +39,17 @@ namespace Qi.DataTables
         /// <returns></returns>
         public IEnumerable<object[]> GetRows()
         {
+            if (_data == null)
+            {
+                throw new CreatingResultException("Please call SetData method first.");
+            }
             var result = new List<object[]>();
             if (_data != null)
             {
-                foreach (T data in _data)
+                foreach (var data in _data)
                 {
                     var item = new object[_columns.Count];
-                    for (int index = 0; index < Columns.Count; index++)
+                    for (var index = 0; index < Columns.Count; index++)
                     {
                         item[index] = Columns[index].GetValue(data);
                     }
@@ -50,19 +63,30 @@ namespace Qi.DataTables
             return result;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="items"></param>
+        /// <returns></returns>
         IDataTable IDataTable.SetData(IEnumerable<object> items)
         {
-            List<T> a = items.Select(item => (T) item).ToList();
+            List<T> a = items.Select(item => (T)item).ToList();
             return SetData(a);
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
         public bool HasRows
         {
             get { return _data != null && _data.Any(); }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="calculatorName"></param>
+        /// <returns></returns>
         public object[] GetSummaries(string calculatorName)
         {
             var result = new object[Columns.Count];
@@ -79,10 +103,21 @@ namespace Qi.DataTables
         }
 
         #endregion
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public object[] GetSummaries()
         {
             return GetSummaries(0);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="calculatorIndex"></param>
+        /// <returns></returns>
         public object[] GetSummaries(int calculatorIndex)
         {
             var result = new object[Columns.Count];
@@ -95,6 +130,13 @@ namespace Qi.DataTables
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TReturnValue"></typeparam>
+        /// <param name="columnName"></param>
+        /// <param name="accessor"></param>
+        /// <returns></returns>
         public IColumn Column<TReturnValue>(string columnName, Func<T, TReturnValue> accessor)
         {
             if (columnName == null)
@@ -105,11 +147,16 @@ namespace Qi.DataTables
             {
                 throw new ArgumentOutOfRangeException(columnName + " is duplicate column name.");
             }
-            var column = new Column<T, TReturnValue>(columnName) {Accessor = accessor};
+            var column = new Column<T, TReturnValue>(columnName) { Accessor = accessor };
             Columns.Add(column);
             return column;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="items"></param>
+        /// <returns></returns>
         public DataTable<T> SetData(IEnumerable<T> items)
         {
             if (items == null)

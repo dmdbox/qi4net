@@ -81,6 +81,7 @@
     <Compile Include="DataTables\Calculators\Avgs\AvgDoubleNullable.cs" />
     <Compile Include="DataTables\Columns\CustomeCalculatorColumn.cs" />
     <Compile Include="DataTables\Columns\ReferenceColumn.cs" />
+    <Compile Include="DataTables\CreatingResultException.cs" />
     <Compile Include="DataTables\Expressions.cs" />
     <Compile Include="DataTables\Calculators\Sums\SumDecimal.cs" />
     <Compile Include="DataTables\Calculators\Sums\SumDecimalNullable.cs" />
@@ -115,6 +116,8 @@
     <Compile Include="Text\AesUtil.cs" />
     <Compile Include="Text\DESHelper.cs" />
     <Compile Include="Text\NamedFormatterHelper.cs" />
+    <Compile Include="Threads\Assignments\IAssignment.cs" />
+    <Compile Include="Threads\MultiThreadAssignment.cs" />
     <Compile Include="Time.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -134,6 +137,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
