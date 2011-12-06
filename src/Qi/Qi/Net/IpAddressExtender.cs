@@ -18,7 +18,7 @@ namespace Qi.Net
         /// <param name="client"></param>
         /// <returns></returns>
         /// <exception cref="NetworkException">failed to get client mac</exception>
-        public static string GetMac(this IPAddress client)
+        public static MacAddress GetMac(this IPAddress client)
         {
             if (client == null)
                 throw new ArgumentNullException("client");
@@ -38,14 +38,14 @@ namespace Qi.Net
                 }
                 for (int i = 0; i < 11; i++)
                 {
-                    if (0 == (i%2))
+                    if (0 == (i % 2))
                     {
                         macDest = i == 10
                                       ? macDest.Insert(0, macSrc.Substring(i, 2))
                                       : "-" + macDest.Insert(0, macSrc.Substring(i, 2));
                     }
                 }
-                return macDest;
+                return MacAddress.Parse(macDest);
             }
             catch (Exception ex)
             {
