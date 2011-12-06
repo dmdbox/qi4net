@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EnumDescriptionAttributeTest.cs" />
+    <Compile Include="IoExtenderTest.cs" />
     <Compile Include="MultiThreadAssignmentTest.cs" />
     <Compile Include="NamedFormatterHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

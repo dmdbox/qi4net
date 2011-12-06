@@ -92,7 +92,7 @@ namespace Qi.Test
             int min = 55;
             target = target.AddMinutes(min);
             var expect = new TimeSpan(hour, (min + mins), second);
-            Assert.AreEqual(expect.Ticks, target.Ticks);          
+            Assert.AreEqual(expect.Ticks, target.Ticks);
         }
 
         /// <summary>
@@ -128,6 +128,19 @@ namespace Qi.Test
 
             Assert.AreEqual(expect.Ticks, target.Ticks);
         }
+        [TestMethod]
+        public void AddHourMoreThan_23_hour()
+        {
+            int hour = 1;
+            int mins = 0;
+            int second = 0;
+            var target = new Time(hour, mins, second);
+            int hour1 = 29;
+            target = target.AddHours(hour1);
+
+            Assert.AreEqual("6:0:0", target.ToString());
+        }
+
 
         /// <summary>
         ///A test for Time Constructor
@@ -178,11 +191,11 @@ namespace Qi.Test
         [TestMethod]
         public void SecondsTest()
         {
-            var target = new Time(23,1,0); 
+            var target = new Time(23, 1, 0);
             int actual;
             actual = target.Seconds;
-            Assert.AreEqual(actual,0);
-            
+            Assert.AreEqual(actual, 0);
+
         }
 
         /// <summary>
@@ -191,7 +204,7 @@ namespace Qi.Test
         [TestMethod]
         public void MinutesTest()
         {
-            var target = new Time(0,23,0);
+            var target = new Time(0, 23, 0);
             int actual;
             actual = target.Minutes;
             Assert.AreEqual(23, actual);
@@ -203,7 +216,7 @@ namespace Qi.Test
         [TestMethod]
         public void MillsecondsTest()
         {
-            var target = new Time(1,2,3,4); 
+            var target = new Time(1, 2, 3, 4);
             int actual;
             actual = target.Millseconds;
             Assert.AreEqual(4, actual);
@@ -215,7 +228,7 @@ namespace Qi.Test
         [TestMethod]
         public void HoursTest()
         {
-            var target = new Time(1,0,0);
+            var target = new Time(1, 0, 0);
             int actual;
             actual = target.Hours;
             Assert.AreEqual(actual, 1);
@@ -227,9 +240,9 @@ namespace Qi.Test
         [TestMethod]
         public void op_SubtractionTest1()
         {
-            var a = new Time(2,2,2); 
-            var b = new Time(1,1,1); 
-            var expected = new TimeSpan(1,1,1);
+            var a = new Time(2, 2, 2);
+            var b = new Time(1, 1, 1);
+            var expected = new TimeSpan(1, 1, 1);
             TimeSpan actual;
             actual = (a - b);
             Assert.AreEqual(expected, actual);
@@ -241,17 +254,17 @@ namespace Qi.Test
         [TestMethod]
         public void op_AdditionTest()
         {
-            var a = new Time(23,0,0); 
-            var b = new Time(2,0,0); 
-            var expected = new TimeSpan(25,0,0); 
+            var a = new Time(23, 0, 0);
+            var b = new Time(2, 0, 0);
+            var expected = new TimeSpan(25, 0, 0);
             TimeSpan actual;
             actual = (a + b);
             Assert.AreEqual(expected, actual);
-            
+
         }
 
-   
-   
+
+
 
         /// <summary>
         ///A test for Time Constructor

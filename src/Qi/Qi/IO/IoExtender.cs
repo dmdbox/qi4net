@@ -12,6 +12,8 @@ namespace Qi.IO
         /// <param name="path"></param>
         public static void CreateDirectories(string path)
         {
+            if (String.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
             var info = new DirectoryInfo(path);
             var infos = new List<DirectoryInfo>();
             while (info != null)
@@ -27,6 +29,11 @@ namespace Qi.IO
             }
         }
 
+        public static void CreateEx(this DirectoryInfo directory)
+        {
+            CreateDirectories(directory.FullName);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -37,7 +44,9 @@ namespace Qi.IO
         public static FileInfo[] GetFilesEx(this DirectoryInfo parentDirectory, string searchPattern,
                                             SearchOption searchOption)
         {
-            string[] searchPatterns = searchPattern.Split(new[] {'|'}, StringSplitOptions.RemoveEmptyEntries);
+            if (String.IsNullOrEmpty(searchPattern))
+                throw new ArgumentNullException("searchPattern");
+            string[] searchPatterns = searchPattern.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
             var files = new List<FileInfo>();
             foreach (string sp in searchPatterns)
             {
@@ -45,9 +54,16 @@ namespace Qi.IO
             }
             return files.ToArray();
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parentDirectory"></param>
+        /// <param name="searchPattern"></param>
+        /// <returns></returns>
         public static FileInfo[] GetFilesEx(this DirectoryInfo parentDirectory, string searchPattern)
         {
+            if (String.IsNullOrEmpty(searchPattern))
+                throw new ArgumentNullException("searchPattern");
             return GetFilesEx(parentDirectory, searchPattern, SearchOption.TopDirectoryOnly);
         }
     }

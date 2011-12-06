@@ -116,7 +116,6 @@
     <Compile Include="Text\AesUtil.cs" />
     <Compile Include="Text\DESHelper.cs" />
     <Compile Include="Text\NamedFormatterHelper.cs" />
-    <Compile Include="Threads\Assignments\IAssignment.cs" />
     <Compile Include="Threads\MultiThreadAssignment.cs" />
     <Compile Include="Time.cs" />
   </ItemGroup>

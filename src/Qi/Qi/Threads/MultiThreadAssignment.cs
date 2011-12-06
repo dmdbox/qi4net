@@ -27,6 +27,7 @@ namespace Qi.Threads
             _threadCount = threadCount;
             _executeHandler = threadState;
         }
+
         /// <summary>
         /// 
         /// </summary>

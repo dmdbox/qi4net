@@ -94,10 +94,10 @@ namespace Qi
 
         private static TimeSpan CheckTimeSpanBound(TimeSpan time)
         {
-            if (time.TotalDays >= 1)
+            if (time.Days >= 1)
             {
-                int subtractDay = Convert.ToInt32(time.TotalDays - 1);
-                var s = new TimeSpan(subtractDay, 0, 0, 0);
+                //int subtractDay = Convert.ToInt32(time.Days - 1);
+                var s = new TimeSpan(time.Days, 0, 0, 0);
                 return time - s;
             }
             return time;
@@ -146,6 +146,16 @@ namespace Qi
             return !(a == b);
         }
 
+        public static bool operator >=(Time a, Time b)
+        {
+            return a._ticks >= b._ticks;
+        }
+
+        public static bool operator <=(Time a, Time b)
+        {
+            return a._ticks <= b._ticks;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -166,7 +176,7 @@ namespace Qi
         {
             unchecked
             {
-                return _ticks.GetHashCode()*3;
+                return _ticks.GetHashCode() * 3;
             }
         }
 
@@ -178,7 +188,7 @@ namespace Qi
             if (obj.GetType() != GetType())
                 return true;
 
-            return ((Time) obj) == this;
+            return ((Time)obj) == this;
         }
     }
 }
