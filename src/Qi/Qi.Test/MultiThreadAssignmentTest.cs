@@ -55,7 +55,7 @@ namespace Qi.Test
                 actual += i;
             }
             var result = 0;
-            MultiThreadAssignment<int> MultiSummary = new MultiThreadAssignment<int>(5, s => result += s.Sum());
+            var MultiSummary = new MultiThreadAssignment<int>(5, s => result += s.Sum());
             MultiSummary.Execute(sumData);
             Assert.AreEqual(actual, result);
         }
