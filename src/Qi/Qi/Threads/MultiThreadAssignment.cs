@@ -56,6 +56,58 @@ namespace Qi.Threads
             }
         }
 
+        public void ExceuteEachThread(IList<T> datas, Func<int> eachCallback)
+        {
+            if (datas == null)
+                throw new ArgumentNullException("datas");
+            if (eachCallback == null) throw new ArgumentNullException("eachCallback");
+            if (datas.Count == 0)
+                return;
+            var globalCheck = new ManualResetEvent(false);
+            Thread[] threads;
+            foreach (var assignedData in AssignThread(datas, out threads))
+            {
+                ActualExecute(assignedData, globalCheck);
+            }
+
+            while (true)
+            {
+                globalCheck.WaitOne();
+                eachCallback();
+                if (AllDone(threads))
+                {
+                    break;
+                }
+            }
+        }
+
+
+        public void AsyncExecute(IList<T> datas, Func<int> callback)
+        {
+            if (datas == null)
+                throw new ArgumentNullException("datas");
+            if (callback == null) throw new ArgumentNullException("callback");
+            if (datas.Count == 0)
+                return;
+            var globalCheck = new ManualResetEvent(false);
+            Thread[] threads;
+            foreach (var assignedData in AssignThread(datas, out threads))
+            {
+                ActualExecute(assignedData, globalCheck);
+            }
+
+            while (true)
+            {
+                globalCheck.WaitOne();
+                if (AllDone(threads))
+                {
+                    callback();
+                    break;
+                }
+            }
+        }
+
+
         private IEnumerable<IList<T>> AssignThread(IList<T> datas, out Thread[] threads)
         {
             DateTime dateTime = DateTime.Now;
@@ -69,12 +121,12 @@ namespace Qi.Threads
             return result;
         }
 
+
         private void ActualExecute(IList<T> data, ManualResetEvent globalCheckerEvent)
         {
             _executeHandler(data);
             globalCheckerEvent.Set();
         }
-
 
         private static bool AllDone(IEnumerable<Thread> threads)
         {
@@ -127,14 +179,12 @@ namespace Qi.Threads
 
             if (remainder != 0)
             {
-                var ary = new T[remainder];
-                Array.Copy(sourceArray, aryMax*_threadCount, ary, 0, ary.Length);
                 //当data的数目少于_threadCount，那么就用foreach平均分配;
-                int i = 0;
-                foreach (T obj in ary)
+                int threadIndex = 0;
+                for (int i = aryMax*_threadCount; i < sourceArray.Length; i++)
                 {
-                    assignedDataSet[i].Add(obj);
-                    i++;
+                    assignedDataSet[threadIndex].Add(sourceArray[i]);
+                    threadIndex++;
                 }
             }
         }

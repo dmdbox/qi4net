@@ -9,8 +9,6 @@ namespace ThreadPerformerTest
     {
         static Int64 result = 0;
 
-        static object lockItem = "lockItem";
-
         static void Main(string[] args)
         {
             var max = 840001;
@@ -48,10 +46,8 @@ namespace ThreadPerformerTest
         private static void OnExecuteFunction(IList<int> s)
         {
             Int64 partyResult = s.Aggregate<int, long>(0, (current, item) => current + item);
-            lock (lockItem)
-            {
-                result += partyResult;
-            }
+            result += partyResult;
+            
         }
     }
 }
