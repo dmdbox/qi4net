@@ -13,7 +13,7 @@ namespace ThreadPerformerTest
 
         static void Main(string[] args)
         {
-            var max = 840000;
+            var max = 840001;
             var ilist = new List<int>();
             var counter = 0;
             var random = new Random();
@@ -24,7 +24,7 @@ namespace ThreadPerformerTest
             }
 
             DateTime dateTime = DateTime.Now;
-            
+
             for (int i = 0; i < ilist.Count; i++)
             {
                 result += ilist[i];
@@ -34,7 +34,7 @@ namespace ThreadPerformerTest
 
             dateTime = DateTime.Now;
             result = 0;
-         
+
             Qi.Threads.ThreadQuery.AvgExecute<int>(4, ilist, OnExecuteFunction);
             Console.WriteLine("4 thread result:" + result);
             Console.WriteLine((DateTime.Now - dateTime).TotalMilliseconds);

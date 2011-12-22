@@ -39,113 +39,102 @@ namespace Qi.Threads
                 throw new ArgumentNullException("datas");
             if (datas.Count == 0)
                 return;
-            IAsyncResult i = AsyncExecute(datas, null);
-            WaitHandle t = i.AsyncWaitHandle;
-            t.WaitOne();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="datas"></param>
-        /// <param name="callback"></param>
-        /// <returns></returns>
-        public IAsyncResult AsyncExecute(IList<T> datas, AsyncCallback callback)
-        {
-            var waitCallBack = new WaitCallback(Waitting);
-            if (datas.Count == 0)
+            var globalCheck = new ManualResetEvent(false);
+            Thread[] threads;
+            foreach (var assignedData in AssignThread(datas, out threads))
             {
-                return waitCallBack.BeginInvoke(new Thread[0], callback, null);
+                ActualExecute(assignedData, globalCheck);
             }
 
-            List<T>[] assignedData = AssignThread(datas);
-            var threads = new Thread[assignedData.Length];
-            int i = 0;
-            foreach (var a in assignedData)
-            {
-                threads[i] = new Thread(s => _executeHandler((IList<T>)s)) { IsBackground = true };
-                threads[i].Start(a);
-                i++;
-            }
-            return waitCallBack.BeginInvoke(threads, callback, null);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="state"></param>
-        private static void Waitting(object state)
-        {
-            var threads = (Thread[])state;
             while (true)
             {
-                bool allfinish = false;
-                foreach (Thread t in threads)
-                {
-                    if (t.IsAlive)
-                    {
-                        break;
-                    }
-                    allfinish = true;
-                }
-                if (allfinish)
+                globalCheck.WaitOne();
+                if (AllDone(threads))
                 {
                     break;
                 }
             }
         }
 
+        private IEnumerable<IList<T>> AssignThread(IList<T> datas, out Thread[] threads)
+        {
+            DateTime dateTime = DateTime.Now;
+            List<T>[] result = AssignThreadData(datas);
+            threads = new Thread[result.Length];
+            for (int i = 0; i < result.Length; i++)
+            {
+                threads[i] = new Thread(s => _executeHandler((IList<T>) s)) {IsBackground = true};
+            }
+            Console.WriteLine("assignment time:" + (DateTime.Now - dateTime).TotalMilliseconds);
+            return result;
+        }
+
+        private void ActualExecute(IList<T> data, ManualResetEvent globalCheckerEvent)
+        {
+            _executeHandler(data);
+            globalCheckerEvent.Set();
+        }
+
+
+        private static bool AllDone(IEnumerable<Thread> threads)
+        {
+            bool allfinish = false;
+            foreach (Thread t in threads)
+            {
+                if (t.IsAlive)
+                {
+                    break;
+                }
+                allfinish = true;
+            }
+            return allfinish;
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="datas"></param>
         /// <returns></returns>
-        private List<T>[] AssignThread(IList<T> datas)
+        private List<T>[] AssignThreadData(IList<T> datas)
         {
-            DateTime date = DateTime.Now;
-            //int threadCount = _threadCount < datas.Count ? _threadCount : datas.Count;
-            var assignedDataSet = new List<T>[
-                (datas.Count < _threadCount ? (datas.Count) : _threadCount)];
-            for (int i = 0; i < assignedDataSet.Length; i++)
-            {
-                assignedDataSet[i] = new List<T>();
-            }
-
-            Assignment(assignedDataSet, datas.ToArray());
-            Console.WriteLine((DateTime.Now - date).TotalMilliseconds);
+            var assignedDataSet = new List<T>[(datas.Count < _threadCount ? (datas.Count) : _threadCount)];
+            //for (int i = 0; i < assignedDataSet.Length; i++)
+            //{
+            //    assignedDataSet[i] = new List<T>();
+            //}
+            Assignment(assignedDataSet, datas);
             return assignedDataSet;
         }
 
-        private void Assignment(IList<List<T>> assignedDataSet, T[] datas)
+        private void Assignment(IList<List<T>> assignedDataSet, IList<T> datas)
         {
-            if (datas.Length < _threadCount)
+            int remainder;
+            int aryMax = Math.DivRem(datas.Count, _threadCount, out remainder);
+            T[] sourceArray = datas.ToArray();
+            for (int i = 0; i < assignedDataSet.Count; i++)
             {
-                //当data的数目少于_threadCount，那么就用foreach平均分配;
-                int i = 0;
-                foreach (T obj in datas)
-                {
-                    //平均分配到每一个Thread和data
-                    if (i >= _threadCount)
-                        i = 0;
-                    assignedDataSet[i].Add(obj);
-                    i++;
-                }
+                assignedDataSet[i] = new List<T>(aryMax + remainder); //尽量避免array copy
             }
-            else
+            if (aryMax != 0)
             {
-                long remainder;
-                long d = Math.DivRem(datas.LongLength, Convert.ToInt64(_threadCount), out remainder);
                 for (int i = 0; i < _threadCount; i++)
                 {
-                    var ary = new T[d];
-                    Array.Copy(datas, d * i, ary, 0, ary.Length);
+                    var ary = new T[aryMax];
+                    Array.Copy(sourceArray, aryMax*i, ary, 0, ary.Length);
                     assignedDataSet[i].AddRange(ary);
                 }
-                if (remainder != 0)
+            }
+
+            if (remainder != 0)
+            {
+                var ary = new T[remainder];
+                Array.Copy(sourceArray, aryMax*_threadCount, ary, 0, ary.Length);
+                //当data的数目少于_threadCount，那么就用foreach平均分配;
+                int i = 0;
+                foreach (T obj in ary)
                 {
-                    var ary = new T[remainder];
-                    Array.Copy(datas, d * _threadCount, ary, 0, ary.Length);
-                    Assignment(assignedDataSet, ary);
+                    assignedDataSet[i].Add(obj);
+                    i++;
                 }
             }
         }
