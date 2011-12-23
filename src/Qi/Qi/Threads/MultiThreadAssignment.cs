@@ -55,7 +55,11 @@ namespace Qi.Threads
                 }
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="datas"></param>
+        /// <param name="eachCallback"></param>
         public void ExceuteEachThread(IList<T> datas, Func<int> eachCallback)
         {
             if (datas == null)

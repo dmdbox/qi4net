@@ -52,16 +52,17 @@ namespace Qi.Web
             {
                 buffer.Append("\r\n");
             }
+            var i = 1;
             foreach (string o in data.Keys)
             {
-                buffer.Append("{\"");
-                if (format)
-                {
-                    buffer.Append("\r\n");
-                }
-                buffer.Append(o)
-                    .Append("\":")
+                buffer.Append("\"").Append(o).Append("\":")
                     .Append(ToJson(data[o]));
+                
+                if (i != data.Count)
+                {
+                    buffer.Append(",");
+                }
+                i++;
                 if (format)
                     buffer.Append("\r\n");
             }

@@ -1,20 +1,23 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Qi.Threads;
 
 namespace ThreadPerformerTest
 {
-    class Program
+    internal class Program
     {
-        static Int64 result = 0;
+        private static Int64 result;
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            var max = 840001;
+            int max = 840001;
             var ilist = new List<int>();
-            var counter = 0;
+            int counter = 0;
             var random = new Random();
+            IList<int> a=new List<int>();
+            
             while (counter < max)
             {
                 ilist.Add(random.Next(max));
@@ -33,21 +36,18 @@ namespace ThreadPerformerTest
             dateTime = DateTime.Now;
             result = 0;
 
-            Qi.Threads.ThreadQuery.AvgExecute<int>(4, ilist, OnExecuteFunction);
+            ThreadQuery.AvgExecute(4, ilist, OnExecuteFunction);
             Console.WriteLine("4 thread result:" + result);
             Console.WriteLine((DateTime.Now - dateTime).TotalMilliseconds);
 
 
             Console.Read();
-
-
         }
 
         private static void OnExecuteFunction(IList<int> s)
         {
             Int64 partyResult = s.Aggregate<int, long>(0, (current, item) => current + item);
             result += partyResult;
-            
         }
     }
 }
