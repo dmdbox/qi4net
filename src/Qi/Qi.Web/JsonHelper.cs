@@ -42,14 +42,34 @@ namespace Qi.Web
 
         public static string ToJson(Dictionary<string, object> data)
         {
+            return ToJson(data, false);
+        }
+
+        public static string ToJson(Dictionary<string, object> data, bool format)
+        {
             var buffer = new StringBuilder("{");
+            if (format)
+            {
+                buffer.Append("\r\n");
+            }
             foreach (string o in data.Keys)
             {
-                buffer.Append("{\"").Append(o)
+                buffer.Append("{\"");
+                if (format)
+                {
+                    buffer.Append("\r\n");
+                }
+                buffer.Append(o)
                     .Append("\":")
                     .Append(ToJson(data[o]));
+                if (format)
+                    buffer.Append("\r\n");
             }
-            buffer.Append("}");
+            buffer.Append("};");
+            if (format)
+            {
+                buffer.Append("\r\n");
+            }
             return buffer.ToString();
         }
     }
