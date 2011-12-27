@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationHelper.cs" />
+    <Compile Include="ArrayHelper.cs" />
     <Compile Include="DataTables\Calculators\CalculatorBase.cs" />
     <Compile Include="DataTables\Calculators\Avgs\AvgDecimal.cs" />
     <Compile Include="DataTables\Calculators\Avgs\AvgDecimalNullable.cs" />

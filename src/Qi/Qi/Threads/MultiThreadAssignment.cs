@@ -55,6 +55,7 @@ namespace Qi.Threads
                 }
             }
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -115,7 +116,7 @@ namespace Qi.Threads
         private IEnumerable<IList<T>> AssignThread(IList<T> datas, out Thread[] threads)
         {
             DateTime dateTime = DateTime.Now;
-            List<T>[] result = AssignThreadData(datas);
+            T[][] result = datas.ToArray().DivEqual(_threadCount);
             threads = new Thread[result.Length];
             for (int i = 0; i < result.Length; i++)
             {
@@ -144,53 +145,6 @@ namespace Qi.Threads
                 allfinish = true;
             }
             return allfinish;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="datas"></param>
-        /// <returns></returns>
-        private List<T>[] AssignThreadData(IList<T> datas)
-        {
-            var assignedDataSet = new List<T>[(datas.Count < _threadCount ? (datas.Count) : _threadCount)];
-            //for (int i = 0; i < assignedDataSet.Length; i++)
-            //{
-            //    assignedDataSet[i] = new List<T>();
-            //}
-            Assignment(assignedDataSet, datas);
-            return assignedDataSet;
-        }
-
-        private void Assignment(IList<List<T>> assignedDataSet, IList<T> datas)
-        {
-            int remainder;
-            int aryMax = Math.DivRem(datas.Count, _threadCount, out remainder);
-            T[] sourceArray = datas.ToArray();
-            for (int i = 0; i < assignedDataSet.Count; i++)
-            {
-                assignedDataSet[i] = new List<T>(aryMax + remainder); //尽量避免array copy
-            }
-            if (aryMax != 0)
-            {
-                for (int i = 0; i < _threadCount; i++)
-                {
-                    var ary = new T[aryMax];
-                    Array.Copy(sourceArray, aryMax*i, ary, 0, ary.Length);
-                    assignedDataSet[i].AddRange(ary);
-                }
-            }
-
-            if (remainder != 0)
-            {
-                //当data的数目少于_threadCount，那么就用foreach平均分配;
-                int threadIndex = 0;
-                for (int i = aryMax*_threadCount; i < sourceArray.Length; i++)
-                {
-                    assignedDataSet[threadIndex].Add(sourceArray[i]);
-                    threadIndex++;
-                }
-            }
         }
     }
 }
