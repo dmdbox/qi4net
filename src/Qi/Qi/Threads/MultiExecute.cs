@@ -53,7 +53,8 @@ namespace Qi.Threads
                 throw new ArgumentNullException("data");
             if (data.Length == 0)
                 return;
-            Execute<T>(data, executeFunc, null, null);
+            var handler = new VoidFunc<T[], VoidFunc<T[]>, VoidFunc>(ActualExecute);
+            handler.BeginInvoke(data, executeFunc, null, a => { }, null);
         }
 
         public void Execute<T>(T[] data, VoidFunc<T[]> executeFunc, VoidFunc callback)
@@ -63,17 +64,22 @@ namespace Qi.Threads
                 throw new ArgumentNullException("data");
             if (data.Length == 0)
                 return;
-            Execute<T>(data, executeFunc, null, callback);
+            var handler = new VoidFunc<T[], VoidFunc<T[]>, VoidFunc>(ActualExecute);
+            handler.BeginInvoke(data, executeFunc, null, a =>
+            {
+                if (callback != null)
+                    callback();
+            }, null);
         }
 
         public void Execute<T>(T[] data, VoidFunc<T[]> executeFunc, VoidFunc threadComplete, VoidFunc callback)
         {
-            if (data == null)throw new ArgumentNullException("data");
+            if (data == null) throw new ArgumentNullException("data");
             if (data.Length == 0) return;
-            
+
             if (executeFunc == null) throw new ArgumentNullException("executeFunc");
             if (threadComplete == null) throw new ArgumentNullException("threadComplete");
-            
+
             var handler = new VoidFunc<T[], VoidFunc<T[]>, VoidFunc>(ActualExecute);
             handler.BeginInvoke(data, executeFunc, threadComplete, a =>
                                                                        {

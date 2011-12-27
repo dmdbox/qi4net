@@ -24,18 +24,19 @@ namespace Qi.Threads
             thread.Execute(data, executeFunc, threadCompleteHandler, callback);
         }
 
-        public static void AvaExecute<T>(this T[] data, int threadCount, VoidFunc<T[]> executeFunc, VoidFunc callback)
+        public static void AvgExecute<T>(this T[] data, int threadCount, VoidFunc<T[]> executeFunc, VoidFunc callback)
         {
             var thread = new MultiExecute(threadCount);
             thread.Execute(data, executeFunc, callback);
         }
 
-        public static void AvaExecute<T, TReturn>(this T[] data, int threadCount, Func<T[], TReturn> executeFunc, VoidFunc<TReturn> threadCompleteHandler, VoidFunc callback)
+        public static void AvgExecute<T, TReturn>(this T[] data, int threadCount, Func<T[], TReturn> executeFunc, VoidFunc<TReturn> threadCompleteHandler, VoidFunc callback)
         {
             var thread = new MultiExecute(threadCount);
             thread.Execute(data, executeFunc, threadCompleteHandler, callback);
         }
 
+        
 
 
         /// <summary>
