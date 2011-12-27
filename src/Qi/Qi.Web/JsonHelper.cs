@@ -13,7 +13,7 @@ namespace Qi.Web
     public static class JsonHelper
     {
         /// <summary>
-        /// 
+        /// 0
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -42,11 +42,13 @@ namespace Qi.Web
 
         public static string ToJson(Dictionary<string, object> data)
         {
+            if (data == null) throw new ArgumentNullException("data");
             return ToJson(data, false);
         }
 
         public static string ToJson(Dictionary<string, object> data, bool format)
         {
+            if (data == null) throw new ArgumentNullException("data");
             var buffer = new StringBuilder("{");
             if (format)
             {

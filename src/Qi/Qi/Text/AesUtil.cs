@@ -22,7 +22,6 @@ namespace Qi.Text
             {
                 throw new ArgumentNullException("shareKey");
             }
-            shareKey = shareKey.ToLower();
             shareKey = shareKey.Length > 32 ? shareKey.Substring(0, 32) : shareKey.PadLeft(32, shareKey[0]);
 
             byte[] keyArray = Encoding.UTF8.GetBytes(shareKey);
@@ -52,8 +51,6 @@ namespace Qi.Text
             {
                 throw new ArgumentNullException("shareKey");
             }
-
-            shareKey = shareKey.ToLower();
             shareKey = shareKey.Length > 32 ? shareKey.Substring(0, 32) : shareKey.PadLeft(32, shareKey[0]);
 
             byte[] keyArray = Encoding.UTF8.GetBytes(shareKey);

@@ -1,10 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Qi
 {
     public static class ArrayHelper
     {
+        public static string Format(this byte[] bytes, string format)
+        {
+            var stringbuilder = new StringBuilder(bytes.Length*2);
+            foreach (byte byt in bytes)
+            {
+                stringbuilder.Append(byt.ToString(format));
+            }
+            return stringbuilder.ToString();
+        }
+
+        /// <summary>
+        /// use x2 format to conver byte;
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
+        public static string Format(this byte[] bytes)
+        {
+            return bytes.Format("X2");
+        }
+
         /// <summary>
         /// 把ary 按照每份拥有多个来分组数据
         /// </summary>
