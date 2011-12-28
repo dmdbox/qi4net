@@ -105,7 +105,6 @@
     <Compile Include="DataTables\Calculators\Sum.cs" />
     <Compile Include="EnumDescription.cs" />
     <Compile Include="EnumHelper.cs" />
-    <Compile Include="IO\IniReader.cs" />
     <Compile Include="IO\IoExtender.cs" />
     <Compile Include="IO\Serialization\SerializationHelper.cs" />
     <Compile Include="Net\MacAddress.cs" />
@@ -115,10 +114,10 @@
     <Compile Include="DataTables\ColumnCollection.cs" />
     <Compile Include="DataTables\DataTable.cs" />
     <Compile Include="QFunc.cs" />
-    <Compile Include="Text\AesUtil.cs" />
-    <Compile Include="Text\DESHelper.cs" />
+    <Compile Include="Secret\AesUtil.cs" />
+    <Compile Include="Secret\DESHelper.cs" />
     <Compile Include="Text\NamedFormatterHelper.cs" />
-    <Compile Include="Text\Sha1Helper.cs" />
+    <Compile Include="Secret\Sha1Helper.cs" />
     <Compile Include="Threads\MultiExecute.cs" />
     <Compile Include="Threads\ThreadHelper.cs" />
     <Compile Include="Time.cs" />
