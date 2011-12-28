@@ -1,9 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.IO.Ports;
 using System.Text;
 using System.Threading;
-using log4net;
 using Qi.Sms.Protocol;
+using log4net;
 
 namespace Qi.Sms.DeviceConnections
 {
@@ -21,7 +22,7 @@ namespace Qi.Sms.DeviceConnections
                 throw new ArgumentNullException("portName");
             PortName = portName;
             BaudRate = baudRate;
-            _serialPort = new SerialPort(portName, BaudRate, Parity.None, 8, StopBits.One)
+            _serialPort = new SerialPort(portName, BaudRate)
                               {
                                   DtrEnable = true,
                                   RtsEnable = true,
@@ -129,7 +130,6 @@ namespace Qi.Sms.DeviceConnections
 
         public void Send(string command)
         {
-            _log.Debug("Send:" + command);
             _serialPort.WriteLine(command + "\r\n");
         }
 
@@ -145,6 +145,10 @@ namespace Qi.Sms.DeviceConnections
                 {
                     _returnValue.Append(re);
                 }
+                //using (var reader = new StreamWriter("c:\\a.sms.txt",true))
+                //{
+                //    reader.WriteLine(re);
+                //}
                 Thread.Sleep(100);
             }
             if (_returnValue != null)
