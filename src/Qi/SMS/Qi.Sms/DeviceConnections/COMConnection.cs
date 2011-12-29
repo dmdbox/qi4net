@@ -91,6 +91,7 @@ namespace Qi.Sms.DeviceConnections
                 }
                 finally
                 {
+                    _log.Info("Complete receive is: " + _buffer.ToString());
                     _buffer.Remove(0, _buffer.Length);
                 }
             }
@@ -102,10 +103,12 @@ namespace Qi.Sms.DeviceConnections
         {
             lock (_lockItem)
             {
+                _log.Debug("Invoke send");
                 _buffer.Remove(0, _buffer.Length);
                 _serialPort.WriteLine(command.CompleteCommand());
+                _log.Debug("Invoke send success and wait " + sleepMilSeconds);
                 Thread.Sleep(sleepMilSeconds);
-                _buffer.Remove(0, _buffer.Length);
+                //_buffer.Remove(0, _buffer.Length);
             }
         }
 
@@ -116,17 +119,18 @@ namespace Qi.Sms.DeviceConnections
             {
                 if ((DateTime.Now - now).TotalSeconds > 12)
                 {
-                    _log.Warn("waiting timeout.");
+                    _log.Warn("waiting return timeout.");
                     break;
                 }
                 if (command.Init(_buffer.ToString()))
                 {
+                    _log.Debug("Return value,command is success or not?" + command.Success);
                     break;
                 }
                 Thread.Sleep(100);
             }
             string result = _buffer.ToString();
-            _log.InfoFormat("receive command \r\n {0}", result);
+            //_log.InfoFormat("Wait Return  command \r\n {0}", result);
             return result;
         }
 
@@ -138,17 +142,28 @@ namespace Qi.Sms.DeviceConnections
         private void SerialPortDataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             var serialPort = (SerialPort)sender;
+            StringBuilder sb = null;
+            if (_log.IsDebugEnabled)
+            {
+                sb = new StringBuilder();
+            }
             while (serialPort.BytesToRead > 0)
             {
                 string re = serialPort.ReadExisting();
                 _buffer.Append(re);
                 if (_buffer != null)
                 {
+                    if (_log.IsDebugEnabled)
+                    {
+                        sb.Append(re);
+                    }
                     _buffer.Append(re);
                 }
             }
-
+            if (_log.IsDebugEnabled)
+                _log.Debug("Modem info " + sb.ToString());
             var result = CmtiCommand.GetSmsIndex(_buffer.ToString());
+            _log.Debug("sms receive :" + result.Length);
             if (result.Length != 0)
             {
                 OnReceiveSms(result);
