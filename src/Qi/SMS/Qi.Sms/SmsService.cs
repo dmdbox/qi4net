@@ -4,6 +4,7 @@ using System.Threading;
 using Qi.Sms.Protocol;
 using Qi.Sms.Protocol.Encodes;
 using Qi.Sms.Protocol.SendCommands;
+using log4net;
 using log4net.Config;
 
 
@@ -16,18 +17,21 @@ namespace Qi.Sms
         private readonly IDeviceConnection _deviceConnectin;
         private string _serviceCenterNumber;
         private object lockItem = "";
+        private ILog _log;
         public SmsService(IDeviceConnection connection, string mobile)
             : this(connection)
         {
             _serviceCenterNumber = mobile;
+            _log = LogManager.GetLogger(this.GetType());
         }
 
         public SmsService(IDeviceConnection connection)
         {
+            _log = LogManager.GetLogger(this.GetType());
             ChinaMobile = true;
             if (connection == null)
                 throw new ArgumentNullException("connection");
-
+            _log.Debug("connect is ok.");
             _deviceConnectin = connection;
             _deviceConnectin.ReceivedEvent += DeviceConnectinReceivedEvent;
         }
@@ -159,20 +163,28 @@ namespace Qi.Sms
             }
             var messageFromat = new SetSmsFromatCommand(format);
             AbstractCommand resultCommand = Send(messageFromat);
+            this._log.Debug("Set format command is " + resultCommand.Success);
             if (!resultCommand.Success)
+            {
+
                 return false;
+            }
             sms = PDUdecoding.EncodingOther(sms);
+            this._log.Debug("send long sms's length " + count);
             for (int i = 0; i < count; i++)
             {
+                _log.Info("Send the " + i);
                 string length;
                 string sendMessage = PDUdecoding.EncodingSMS(ServiceCenterNumber, phone, count, i + 1, sms, out length);
                 var cmgs = new CmgsCommand { Argument = length };
-                _deviceConnectin.InvokeSend(cmgs, 500);
+                Send(cmgs);
                 var directCommand = new SendContent
                                         {
                                             Content = sendMessage
                                         };
-                _deviceConnectin.InvokeSend(directCommand, 500);
+                var s = Send(directCommand);
+
+
             }
             return true;
         }
@@ -191,10 +203,11 @@ namespace Qi.Sms
                 SendingEvent(this, new CommandEventHandlerArgs(command));
 
             string value = _deviceConnectin.Send(command);
-            var result = (AbstractCommand)command.Clone();
-            result.Init(value);
-            OnReceivedEvent(result);
-            return result;
+            //var result = (AbstractCommand)command.Clone();
+            //result.Init(value);
+            //OnReceivedEvent(result);
+            return command;
+            //return result;
         }
 
         public ReceiveSms GetSms(int position)
@@ -202,6 +215,7 @@ namespace Qi.Sms
             lock (lockItem)
             {
                 var cmglCommand = (CmgrCommand)Send(new CmgrCommand { MessageIndex = position });
+
                 return new ReceiveSms
                            {
                                Content = cmglCommand.Content,

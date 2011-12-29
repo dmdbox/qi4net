@@ -31,13 +31,27 @@ namespace Qi.Sms.Protocol.SendCommands
             var lines = content.Split(new char[] { '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
             var result = new List<int>();
-
-            foreach (var line in lines)
+            try
             {
-                if (line.Contains("+CMTI"))
-                    result.Add(Convert.ToInt32(Regex.Replace(content, "\\D", "")));
+                foreach (var line in lines)
+                {
+
+                    if (line.Contains("+CMTI"))
+                    {
+                        Console.WriteLine(line);
+                        var a = (Regex.Replace(content, "\\D", ""));
+                        if (a.Trim() != String.Empty)
+                            result.Add(Convert.ToInt32(a));
+                    }
+                }
+                return result.ToArray();
             }
-            return result.ToArray();
+            catch (Exception ex)
+            {
+                Console.WriteLine(content);
+                Console.WriteLine(ex.Message);
+                return new int[0];
+            }
         }
     }
 }

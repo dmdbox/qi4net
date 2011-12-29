@@ -13,25 +13,6 @@ namespace Qi.Sms.ConsoleTest
 {
     internal class Program
     {
-        private static object lockItem = "";
-        private static void Send(string message)
-        {
-            lock (lockItem)
-            {
-                Console.WriteLine(message);
-            }
-        }
-        private static void Receive()
-        {
-            lock (lockItem)
-            {
-                for (int i = 0; i < 10; i++)
-                {
-                    Send("receive and send " + i);
-                    Thread.Sleep(500);
-                }
-            }
-        }
         private static void Main(string[] args)
         {
             //Console.WriteLine(String.Format("\x01a"));
@@ -55,15 +36,7 @@ namespace Qi.Sms.ConsoleTest
             //    // _log.Error("Start sms service have error", ex);
             //    Thread.Sleep(1000);
             //}
-            ThreadPool.QueueUserWorkItem(s => Receive());
-            for (int i = 0; i < 4; i++)
-            {
-                Send("main send some " + i);
-                Thread.Sleep((300));
-            }
-            Console.Read();
-            return;
-            var conn = new ComConnection("COM4", 9600);
+            var conn = new ComConnection("COM1", 9600);
             conn.Open();
             try
             {
@@ -76,17 +49,20 @@ namespace Qi.Sms.ConsoleTest
                 //    conn.Send(command);
                 //}
                 var service = new SmsService(conn, "8613800756500");
+                service.SetSmsAutoRecieve();
+                service.ReceiveSmsEvent += new EventHandler<NewMessageEventHandlerArgs>(service_ReceiveSmsEvent);
                 //service.ChinaMobile = false;
 
 
                 //service.ServiceCenterNumber = "8613800756500";//service.GetServicePhone();
-                ThreadPool.QueueUserWorkItem(MultiSend1, service);
+                //ThreadPool.QueueUserWorkItem(MultiSend1, service);
                 //ThreadPool.QueueUserWorkItem(MultiSend2, service);
                 //ThreadPool.QueueUserWorkItem(MultiSend3, service);
                 Console.Read();
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 Exception exx = ex;
                 Console.Read();
             }
@@ -99,12 +75,20 @@ namespace Qi.Sms.ConsoleTest
             Console.Read();
         }
 
+        static void service_ReceiveSmsEvent(object sender, NewMessageEventHandlerArgs e)
+        {
+            Console.WriteLine("sms index is :" + e.SmsIndex);
+            var s = (SmsService) sender;
+            Console.WriteLine("Sms:::"+s.GetSms(e.SmsIndex).Content);
+            s.Delete(e.SmsIndex);
+        }
+
         public static void MultiSend1(object state)
         {
             var sender = (SmsService)state;
-            var sb = new StringBuilder("其实这是一个中文长短信的测试，这里有多少字，我其实也不知道，不过只要超过70个字符就可以了，。其实这是一个中文长短信的测试，这里有多少字，我其实也不知道，不过只要超过70个字符就可以了，。其实这是一个中文长短信的测试，这里有多少字，我其实也不知道，不过只要超过70个字符就可以了，。");
+            var sb = new StringBuilder("其实这是一个中文长短信的测试，这里有多少字，我其实也不知道，不过只要超过70个字符就可以了。知道，知道，知道，知道，知道，知道，知道，知道，知道，知道，");
 
-            sender.Send("8613532290006", sb.ToString(), SmsFormat.Pdu);
+            sender.Send("13600368080", sb.ToString(), SmsFormat.Pdu);
         }
 
         public static void MultiSend2(object state)

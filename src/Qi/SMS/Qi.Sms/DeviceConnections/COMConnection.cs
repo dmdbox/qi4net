@@ -20,12 +20,13 @@ namespace Qi.Sms.DeviceConnections
                 throw new ArgumentNullException("portName");
             PortName = portName;
             BaudRate = baudRate;
-            _serialPort = new SerialPort(portName, BaudRate)
-                              {
-                                  DtrEnable = true,
-                                  RtsEnable = true,
-                                  Handshake = Handshake.None
-                              };
+            _serialPort = new SerialPort(portName, BaudRate);
+            //{
+            //    DtrEnable = true,
+            //    RtsEnable = true,
+            //    Handshake = Handshake.None
+            //};
+
             _serialPort.DataReceived += SerialPortDataReceived;
         }
 
@@ -158,10 +159,9 @@ namespace Qi.Sms.DeviceConnections
         {
             if (ReceivedEvent != null)
             {
-                lock (_lockItem)
-                {
-                    ReceivedEvent(this, new DeviceCommandEventHandlerArgs(command));
-                }
+
+                ThreadPool.QueueUserWorkItem(s => ReceivedEvent(this, new DeviceCommandEventHandlerArgs((int[])s)), command);
+
             }
         }
     }
