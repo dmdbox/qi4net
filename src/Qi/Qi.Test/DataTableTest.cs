@@ -7,11 +7,11 @@ using Qi.DataTables;
 namespace Qi.Test
 {
     /// <summary>
-    ///This is a test class for ReporterTest and is intended
-    ///to contain all ReporterTest Unit Tests
+    ///This is a test class for DataTableTest and is intended
+    ///to contain all DataTableTest Unit Tests
     ///</summary>
     [TestClass]
-    public class ReporterTest
+    public class DataTableTest
     {
         #region Additional test attributes
 
@@ -52,7 +52,37 @@ namespace Qi.Test
             decimal s = Convert.ToInt32(f);
             Assert.AreEqual(11m, s);
         }
-
+        [TestMethod]
+        public void CalcuteColumns()
+        {
+            var target = new DataTable<SettlementDetails>();
+            var items = new List<SettlementDetails>
+                            {
+                                new SettlementDetails
+                                    {
+                                        Name = "A",
+                                        Amount = 1m,
+                                    },
+                                new SettlementDetails
+                                    {
+                                        Name = "B",
+                                        Amount = 2m,
+                                        
+                                    },
+                                new SettlementDetails
+                                    {
+                                        Name = "C",
+                                        Amount = 4m,
+                                    }
+                            };
+            target.Column("Name", s => s.Name);
+            target.Column("Ammount", s => s.Amount).Sum<decimal?>();
+            target.Column("Amount1", s => s.Amount1);
+            target.SetData(items);
+            target.GetRows();
+            Assert.AreEqual(7m, target.GetSummaries("Sum")[1]);
+            Assert.AreEqual(7m, target.Columns["Ammount"].SumResult());
+        }
         [TestMethod]
         public void BuildRepoert_empty()
         {
@@ -100,7 +130,7 @@ namespace Qi.Test
 
             target.SetData(items);
 
-            var columns = new[] {"Name", "Amount0", "Amount1", "Amount+Amount1"};
+            var columns = new[] { "Name", "Amount0", "Amount1", "Amount+Amount1" };
             int index = 0;
             //check column Name;
             foreach (IColumn column in target.Columns)

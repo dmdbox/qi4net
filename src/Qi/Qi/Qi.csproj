@@ -107,6 +107,7 @@
     <Compile Include="DataTables\Calculator.cs" />
     <Compile Include="DataTables\IDataTable.cs" />
     <Compile Include="DataTables\Calculators\Sum.cs" />
+    <Compile Include="DataTables\SummaryHelper.cs" />
     <Compile Include="EnumDescription.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="IO\IoExtender.cs" />

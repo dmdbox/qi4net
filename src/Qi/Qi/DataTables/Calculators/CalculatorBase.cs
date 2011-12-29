@@ -4,6 +4,10 @@ namespace Qi.DataTables.Calculators
 {
     internal abstract class CalculatorBase<T> : ICalculator
     {
+
+        internal const string SumCalculatorName = "Sum";
+        internal const string AvgCalculatorName = "Avg";
+
         private readonly Func<T, T, T> _calculate;
         private readonly Func<object, T> _convertor;
 
@@ -15,9 +19,9 @@ namespace Qi.DataTables.Calculators
             _calculate = calculate;
         }
 
-        public virtual object Result { get; private set; }
-
         #region ICalculator Members
+
+        public virtual object Result { get; private set; }
 
         public abstract string Name { get; }
 

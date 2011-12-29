@@ -33,11 +33,7 @@ namespace Qi.DataTables
         /// <param name="calculatorIndex"></param>
         /// <returns></returns>
         object GetResult(int calculatorIndex);
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        object SumResult();
+       
 
         /// <summary>
         /// 

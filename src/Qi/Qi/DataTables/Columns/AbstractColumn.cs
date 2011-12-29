@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Qi.DataTables.Calculators;
 
 namespace Qi.DataTables.Columns
 {
+   
     /// <summary>
     /// 
     /// </summary>
@@ -72,14 +74,7 @@ namespace Qi.DataTables.Columns
             return null;
         }
 
-        public object SumResult()
-        {
-            if (HasCaculator("Sum"))
-            {
-                return GetResult("Sum");
-            }
-            throw new ArgumentException(string.Format("Column {0} do not set the Sum function.", Name));
-        }
+      
 
         /// <summary>
         /// Reset all the result include calculator
