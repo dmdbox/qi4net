@@ -6,7 +6,7 @@ using Qi.Sms.Protocol.Encodes;
 using Qi.Sms.Protocol.SendCommands;
 using log4net.Config;
 
-[assembly: XmlConfigurator(Watch = true)]
+
 
 namespace Qi.Sms
 {
