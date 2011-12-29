@@ -44,6 +44,7 @@ namespace Qi.Sms.DeviceConnections
                 _serialPort.Close();
                 _serialPort.Dispose();
             }
+            _log.Info("ComConnection is disposed.");
         }
 
         public void Open()
@@ -98,7 +99,7 @@ namespace Qi.Sms.DeviceConnections
         }
 
         #endregion
-
+        [Obsolete]
         public void InvokeSend(AbstractCommand command, int sleepMilSeconds)
         {
             lock (_lockItem)
@@ -108,7 +109,7 @@ namespace Qi.Sms.DeviceConnections
                 _serialPort.WriteLine(command.CompleteCommand());
                 _log.Debug("Invoke send success and wait " + sleepMilSeconds);
                 Thread.Sleep(sleepMilSeconds);
-                //_buffer.Remove(0, _buffer.Length);
+                _buffer.Remove(0, _buffer.Length);
             }
         }
 
@@ -141,29 +142,12 @@ namespace Qi.Sms.DeviceConnections
 
         private void SerialPortDataReceived(object sender, SerialDataReceivedEventArgs e)
         {
+            _log.Debug("receiver something.");
             var serialPort = (SerialPort)sender;
-            StringBuilder sb = null;
-            if (_log.IsDebugEnabled)
-            {
-                sb = new StringBuilder();
-            }
-            while (serialPort.BytesToRead > 0)
-            {
-                string re = serialPort.ReadExisting();
-                _buffer.Append(re);
-                if (_buffer != null)
-                {
-                    if (_log.IsDebugEnabled)
-                    {
-                        sb.Append(re);
-                    }
-                    _buffer.Append(re);
-                }
-            }
-            if (_log.IsDebugEnabled)
-                _log.Debug("Modem info " + sb.ToString());
+            _buffer.Append(serialPort.ReadExisting());
             var result = CmtiCommand.GetSmsIndex(_buffer.ToString());
-            _log.Debug("sms receive :" + result.Length);
+            _log.Debug(_buffer.ToString());
+            //_log.Debug("sms receive :" + result.Length);
             if (result.Length != 0)
             {
                 OnReceiveSms(result);
