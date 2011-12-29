@@ -76,6 +76,10 @@
     <Compile Include="ApplicationHelper.cs" />
     <Compile Include="ArrayHelper.cs" />
     <Compile Include="DataTables\Calculators\Avg.cs" />
+    <Compile Include="DataTables\Calculators\Avgs\AvgInt32.cs" />
+    <Compile Include="DataTables\Calculators\Avgs\AvgInt32Nullable.cs" />
+    <Compile Include="DataTables\Calculators\Avgs\AvgInt64.cs" />
+    <Compile Include="DataTables\Calculators\Avgs\AvgInt64Nullable.cs" />
     <Compile Include="DataTables\Calculators\CalculatorBase.cs" />
     <Compile Include="DataTables\Calculators\Avgs\AvgDecimal.cs" />
     <Compile Include="DataTables\Calculators\Avgs\AvgDecimalNullable.cs" />
@@ -102,7 +106,6 @@
     <Compile Include="DataTables\IColumn.cs" />
     <Compile Include="DataTables\Calculator.cs" />
     <Compile Include="DataTables\IDataTable.cs" />
-    <Compile Include="DataTables\Util.cs" />
     <Compile Include="DataTables\Calculators\Sum.cs" />
     <Compile Include="EnumDescription.cs" />
     <Compile Include="EnumHelper.cs" />

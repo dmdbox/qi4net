@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Qi.DataTables.Calculators;
 using Qi.DataTables.Calculators.Avgs;
 using Qi.DataTables.Calculators.Sums;
 
@@ -24,10 +23,10 @@ namespace Qi.DataTables
 
         private static readonly Dictionary<Type, Func<ICalculator>> AvgMap = new Dictionary<Type, Func<ICalculator>>
                                                                                   {
-                                                                                      {typeof (int), AvgDecimal.Create},
-                                                                                      {typeof (int?),AvgDecimalNullable.Create},
-                                                                                      {typeof (long), AvgDecimal.Create},
-                                                                                      {typeof (long?),AvgDecimalNullable.Create},
+                                                                                      {typeof (int), AvgInt32.Create},
+                                                                                      {typeof (int?),AvgInt32Nullable.Create},
+                                                                                      {typeof (long), AvgInt64.Create},
+                                                                                      {typeof (long?),AvgInt64Nullable.Create},
                                                                                       {typeof (decimal),AvgDecimal.Create},
                                                                                       {typeof (decimal?),AvgDecimalNullable.Create},
                                                                                       {typeof (Single),AvgDecimal.Create},

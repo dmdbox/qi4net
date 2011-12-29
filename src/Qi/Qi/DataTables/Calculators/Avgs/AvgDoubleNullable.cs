@@ -14,9 +14,6 @@ namespace Qi.DataTables.Calculators.Avgs
             return new AvgDoubleNullable();
         }
 
-        protected override double? getAvag(double? total, int count)
-        {
-            return total / count;
-        }
+       
     }
 }

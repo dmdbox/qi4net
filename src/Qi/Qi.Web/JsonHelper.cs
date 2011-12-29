@@ -40,39 +40,35 @@ namespace Qi.Web
             return Encoding.UTF8.GetString(memoryStream.ToArray());
         }
 
-        public static string ToJson(Dictionary<string, object> data)
+        public static string ToJson(this Dictionary<string, object> data)
         {
             if (data == null) throw new ArgumentNullException("data");
             return ToJson(data, false);
         }
 
-        public static string ToJson(Dictionary<string, object> data, bool format)
+        public static string ToJson(this Dictionary<string, object> data, bool format)
         {
-            if (data == null) throw new ArgumentNullException("data");
-            var buffer = new StringBuilder("{");
-            if (format)
+            if (data == null)
+                throw new ArgumentNullException("data");
+            var formatSymbol = format ? "\r\n" : "";
+            
+            var buffer = new StringBuilder(String.Format("{{{0}",formatSymbol));
+            
+            int i = 1;
+            foreach (string jsonKeyName in data.Keys)
             {
-                buffer.Append("\r\n");
-            }
-            var i = 1;
-            foreach (string o in data.Keys)
-            {
-                buffer.Append("\"").Append(o).Append("\":")
-                    .Append(ToJson(data[o]));
-                
+                buffer.Append("\"").Append(jsonKeyName).Append("\":");
+
+                var obj = data[jsonKeyName] as Dictionary<string, object>;
+                buffer.Append(obj != null ? ToJson(obj, format) : ToJson(data[jsonKeyName]));
+
                 if (i != data.Count)
                 {
-                    buffer.Append(",");
+                    buffer.AppendFormat(",{0}",formatSymbol);
                 }
                 i++;
-                if (format)
-                    buffer.Append("\r\n");
             }
-            buffer.Append("};");
-            if (format)
-            {
-                buffer.Append("\r\n");
-            }
+            buffer.AppendFormat("}}{0}",formatSymbol);
             return buffer.ToString();
         }
     }

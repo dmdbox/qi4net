@@ -14,9 +14,6 @@ namespace Qi.DataTables.Calculators.Avgs
             return new AvgDecimalNullable();
         }
 
-        protected override decimal? getAvag(decimal? total, int count)
-        {
-            return total / count;
-        }
+    
     }
 }

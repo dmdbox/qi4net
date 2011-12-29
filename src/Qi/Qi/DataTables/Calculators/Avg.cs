@@ -11,13 +11,13 @@ namespace Qi.DataTables.Calculators
         {
         }
 
-        public override T Result
+        public override object Result
         {
             get
             {
                 if (_count != 0)
                 {
-                    return getAvag(base.Result, _count);
+                    return getAvag(Convert.ToDecimal(base.Result), _count);
                 }
                 return default(T);
             }
@@ -34,6 +34,9 @@ namespace Qi.DataTables.Calculators
             _count++;
         }
 
-        protected abstract T getAvag(T total, int count);
+        private object getAvag(decimal total, int count)
+        {
+            return total / count;
+        }
     }
 }

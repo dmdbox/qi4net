@@ -15,20 +15,15 @@ namespace Qi.DataTables.Calculators
             _calculate = calculate;
         }
 
-        public virtual T Result { get; private set; }
+        public virtual object Result { get; private set; }
 
         #region ICalculator Members
 
         public abstract string Name { get; }
 
-        object ICalculator.Result
-        {
-            get { return Result; }
-        }
-
         public virtual void SetValue(object rowValue)
         {
-            Result = _calculate(Result, _convertor(rowValue));
+            Result = _calculate((T)Result, _convertor(rowValue));
         }
 
         public void Clear()
