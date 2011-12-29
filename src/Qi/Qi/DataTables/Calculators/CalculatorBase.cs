@@ -23,7 +23,7 @@ namespace Qi.DataTables.Calculators
 
         public virtual void SetValue(object rowValue)
         {
-            Result = _calculate((T)Result, _convertor(rowValue));
+            Result = _calculate(Result == null ? default(T) : (T)Result, _convertor(rowValue));
         }
 
         public void Clear()

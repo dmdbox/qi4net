@@ -2,8 +2,13 @@ namespace Qi.DataTables
 {
     public interface ICalculator
     {
+        /// <summary>
+        /// Gets or sets the name of calculator
+        /// </summary>
         string Name { get; }
-
+        /// <summary>
+        /// Get the result which calculated.
+        /// </summary>
         object Result { get; }
 
         /// <summary>

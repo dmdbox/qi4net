@@ -46,10 +46,10 @@ namespace Qi.DataTables
             var result = new List<object[]>();
             if (_data != null)
             {
-                foreach (var data in _data)
+                foreach (T data in _data)
                 {
                     var item = new object[_columns.Count];
-                    for (var index = 0; index < Columns.Count; index++)
+                    for (int index = 0; index < Columns.Count; index++)
                     {
                         item[index] = Columns[index].GetValue(data);
                     }
@@ -153,7 +153,7 @@ namespace Qi.DataTables
         }
 
         /// <summary>
-        /// 
+        /// set the data in this DataTable
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
