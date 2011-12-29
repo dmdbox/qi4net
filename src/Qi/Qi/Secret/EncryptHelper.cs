@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -160,5 +161,7 @@ namespace Qi.Secret
             byte[] iput = getBytesFunc.GetBytes(content);
             return hashAlgorithm.ComputeHash(iput);
         }
+
+      
     }
 }

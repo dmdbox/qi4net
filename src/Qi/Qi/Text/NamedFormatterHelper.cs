@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace Ornament.Text
+namespace Qi.Text
 {
     public static class NamedFormatterHelper
     {

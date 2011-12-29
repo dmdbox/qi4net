@@ -18,18 +18,43 @@ namespace Qi.Threads
             var thread = new MultiExecute(threadCount);
             thread.Execute(data, executeFunction);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="threadCount"></param>
+        /// <param name="executeFunc"></param>
+        /// <param name="threadCompleteHandler"></param>
+        /// <param name="callback"></param>
         public static void AvgExecute<T>(this T[] data, int threadCount, VoidFunc<T[]> executeFunc, VoidFunc threadCompleteHandler, VoidFunc callback)
         {
             var thread = new MultiExecute(threadCount);
             thread.Execute(data, executeFunc, threadCompleteHandler, callback);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="threadCount"></param>
+        /// <param name="executeFunc"></param>
+        /// <param name="callback"></param>
         public static void AvgExecute<T>(this T[] data, int threadCount, VoidFunc<T[]> executeFunc, VoidFunc callback)
         {
             var thread = new MultiExecute(threadCount);
             thread.Execute(data, executeFunc, callback);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TReturn"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="threadCount"></param>
+        /// <param name="executeFunc"></param>
+        /// <param name="threadCompleteHandler"></param>
+        /// <param name="callback"></param>
         public static void AvgExecute<T, TReturn>(this T[] data, int threadCount, Func<T[], TReturn> executeFunc, VoidFunc<TReturn> threadCompleteHandler, VoidFunc callback)
         {
             var thread = new MultiExecute(threadCount);
