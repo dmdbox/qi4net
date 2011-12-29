@@ -1,10 +1,35 @@
-﻿using System.Security.Cryptography;
+﻿using System;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Qi.Secret
 {
-    public static class Sha1Helper
+    public static class EncryptHelper
     {
+        #region Md5
+
+        public static byte[] Md5Utf8(this string content)
+        {
+            return Encrypt(content, Encoding.UTF8, new MD5CryptoServiceProvider());
+        }
+
+        public static byte[] Md5Utf7(this string content)
+        {
+            return Encrypt(content, Encoding.UTF7, new MD5CryptoServiceProvider());
+        }
+
+        public static byte[] Md5ASCII(this string content)
+        {
+            return Encrypt(content, Encoding.ASCII, new MD5CryptoServiceProvider());
+        }
+
+        public static byte[] Md5Unicode(this string content)
+        {
+            return Encrypt(content, Encoding.Unicode, new MD5CryptoServiceProvider());
+        }
+
+        #endregion
+
         #region Sha1
 
         /// <summary>
@@ -12,7 +37,7 @@ namespace Qi.Secret
         /// </summary>
         public static byte[] Sha1Utf8(this string content)
         {
-            return Sha(content, Encoding.UTF8, new SHA1CryptoServiceProvider());
+            return Encrypt(content, Encoding.UTF8, new SHA1CryptoServiceProvider());
         }
 
         /// <summary>
@@ -22,7 +47,7 @@ namespace Qi.Secret
         /// <returns></returns>
         public static byte[] Sha1ASCII(this string content)
         {
-            return Sha(content, Encoding.ASCII, new SHA1CryptoServiceProvider());
+            return Encrypt(content, Encoding.ASCII, new SHA1CryptoServiceProvider());
         }
 
         /// <summary>
@@ -32,7 +57,12 @@ namespace Qi.Secret
         /// <returns></returns>
         public static byte[] Sha1Unicode(this string content)
         {
-            return Sha(content, Encoding.Unicode, new SHA1CryptoServiceProvider());
+            return Encrypt(content, Encoding.Unicode, new SHA1CryptoServiceProvider());
+        }
+
+        public static byte[] Sha1Utf7(this string content)
+        {
+            return Encrypt(content, Encoding.UTF7, new SHA1CryptoServiceProvider());
         }
 
         #endregion
@@ -46,7 +76,7 @@ namespace Qi.Secret
         /// <returns></returns>
         public static byte[] Sha384Utf8(this string content)
         {
-            return Sha(content, Encoding.UTF8, new SHA384CryptoServiceProvider());
+            return Encrypt(content, Encoding.UTF8, new SHA384CryptoServiceProvider());
         }
 
         /// <summary>
@@ -56,7 +86,7 @@ namespace Qi.Secret
         /// <returns></returns>
         public static byte[] Sha384ASCII(this string content)
         {
-            return Sha(content, Encoding.ASCII, new SHA384CryptoServiceProvider());
+            return Encrypt(content, Encoding.ASCII, new SHA384CryptoServiceProvider());
         }
 
         /// <summary>
@@ -66,7 +96,12 @@ namespace Qi.Secret
         /// <returns></returns>
         public static byte[] Sha384Unicode(this string content)
         {
-            return Sha(content, Encoding.Unicode, new SHA384CryptoServiceProvider());
+            return Encrypt(content, Encoding.Unicode, new SHA384CryptoServiceProvider());
+        }
+
+        public static byte[] Sha384Utf7(this string content)
+        {
+            return Encrypt(content, Encoding.UTF7, new SHA384CryptoServiceProvider());
         }
 
         #endregion
@@ -80,7 +115,7 @@ namespace Qi.Secret
         /// <returns></returns>
         public static byte[] Sha512Utf8(this string content)
         {
-            return Sha(content, Encoding.UTF8, new SHA512CryptoServiceProvider());
+            return Encrypt(content, Encoding.UTF8, new SHA512CryptoServiceProvider());
         }
 
         /// <summary>
@@ -90,7 +125,7 @@ namespace Qi.Secret
         /// <returns></returns>
         public static byte[] Sha512ASCII(this string content)
         {
-            return Sha(content, Encoding.ASCII, new SHA512CryptoServiceProvider());
+            return Encrypt(content, Encoding.ASCII, new SHA512CryptoServiceProvider());
         }
 
         /// <summary>
@@ -100,7 +135,12 @@ namespace Qi.Secret
         /// <returns></returns>
         public static byte[] Sha512Unicode(this string content)
         {
-            return Sha(content, Encoding.Unicode, new SHA512CryptoServiceProvider());
+            return Encrypt(content, Encoding.Unicode, new SHA512CryptoServiceProvider());
+        }
+
+        public static byte[] Sha512Utf7(this string content)
+        {
+            return Encrypt(content, Encoding.UTF7, new SHA512CryptoServiceProvider());
         }
 
         #endregion
@@ -112,8 +152,11 @@ namespace Qi.Secret
         /// <param name="getBytesFunc">把content转换为byte的方法</param>
         /// <param name="hashAlgorithm">加密的方式</param>
         /// <returns></returns>
-        private static byte[] Sha(string content, Encoding getBytesFunc, HashAlgorithm hashAlgorithm)
+        public static byte[] Encrypt(string content, Encoding getBytesFunc, HashAlgorithm hashAlgorithm)
         {
+            if (content == null) throw new ArgumentNullException("content");
+            if (getBytesFunc == null) throw new ArgumentNullException("getBytesFunc");
+            if (hashAlgorithm == null) throw new ArgumentNullException("hashAlgorithm");
             byte[] iput = getBytesFunc.GetBytes(content);
             return hashAlgorithm.ComputeHash(iput);
         }

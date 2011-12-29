@@ -80,6 +80,7 @@
     <Compile Include="MacAddressTest.cs" />
     <Compile Include="NamedFormatterHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QMathTest.cs" />
     <Compile Include="ReporterTest.cs" />
     <Compile Include="Resource1.Designer.cs">
       <AutoGen>True</AutoGen>

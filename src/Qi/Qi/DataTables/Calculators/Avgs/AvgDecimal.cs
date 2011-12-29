@@ -17,7 +17,7 @@ namespace Qi.DataTables.Calculators.Avgs
 
         protected override decimal getAvag(decimal total, int count)
         {
-            return total / count;
+            return total/count;
         }
     }
 }

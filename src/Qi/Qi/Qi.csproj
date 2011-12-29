@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="ApplicationHelper.cs" />
     <Compile Include="ArrayHelper.cs" />
+    <Compile Include="DataTables\Calculators\Avg.cs" />
     <Compile Include="DataTables\Calculators\CalculatorBase.cs" />
     <Compile Include="DataTables\Calculators\Avgs\AvgDecimal.cs" />
     <Compile Include="DataTables\Calculators\Avgs\AvgDecimalNullable.cs" />
@@ -83,7 +84,7 @@
     <Compile Include="DataTables\Columns\CustomeCalculatorColumn.cs" />
     <Compile Include="DataTables\Columns\ReferenceColumn.cs" />
     <Compile Include="DataTables\CreatingResultException.cs" />
-    <Compile Include="DataTables\Expressions.cs" />
+    <Compile Include="DataTables\HorizontalCalulator.cs" />
     <Compile Include="DataTables\Calculators\Sums\SumDecimal.cs" />
     <Compile Include="DataTables\Calculators\Sums\SumDecimalNullable.cs" />
     <Compile Include="DataTables\Calculators\Sums\SumDouble.cs" />
@@ -114,10 +115,11 @@
     <Compile Include="DataTables\ColumnCollection.cs" />
     <Compile Include="DataTables\DataTable.cs" />
     <Compile Include="QFunc.cs" />
+    <Compile Include="QMath.cs" />
     <Compile Include="Secret\AesUtil.cs" />
     <Compile Include="Secret\DESHelper.cs" />
     <Compile Include="Text\NamedFormatterHelper.cs" />
-    <Compile Include="Secret\Sha1Helper.cs" />
+    <Compile Include="Secret\EncryptHelper.cs" />
     <Compile Include="Threads\MultiExecute.cs" />
     <Compile Include="Threads\ThreadHelper.cs" />
     <Compile Include="Time.cs" />

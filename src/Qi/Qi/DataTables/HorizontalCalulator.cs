@@ -7,7 +7,7 @@ namespace Qi.DataTables
     /// <summary>
     /// calulate multi column in a row.
     /// </summary>
-    public static class Expressions
+    public static class HorizontalCalulator
     {
         /// <summary>
         /// 
@@ -38,7 +38,7 @@ namespace Qi.DataTables
         }
 
         /// <summary>
-        /// 
+        /// 创建一个列，该列的结果由其他列相加而成。
         /// </summary>
         /// <typeparam name="TReturnValue"></typeparam>
         /// <param name="table"></param>

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using log4net.Config;
 using Qi.Sms.Protocol;
 using Qi.Sms.Protocol.Encodes;
 using Qi.Sms.Protocol.SendCommands;
+using log4net.Config;
 
 [assembly: XmlConfigurator(Watch = true)]
 
@@ -15,7 +15,7 @@ namespace Qi.Sms
         private const int maxSmsLength = 70;
         private readonly IDeviceConnection _deviceConnectin;
         private string _serviceCenterNumber;
-
+        private object lockItem = "";
         public SmsService(IDeviceConnection connection, string mobile)
             : this(connection)
         {
@@ -70,11 +70,12 @@ namespace Qi.Sms
 
         private void DeviceConnectinReceivedEvent(object sender, DeviceCommandEventHandlerArgs e)
         {
-            var cmd = new CmtiCommand();
-            if (cmd.Init(e.Command))
+            //var cmd = new CmtiCommand();
+            foreach (var index in e.SmsIndex)
             {
-                OnNewMessageEventHandlerArgs(cmd);
+                OnNewMessageEventHandlerArgs(index);
             }
+
         }
 
         public event EventHandler<CommandEventHandlerArgs> SendingEvent;
@@ -98,7 +99,7 @@ namespace Qi.Sms
 
         public bool Send(string phone, string sms, SmsFormat format)
         {
-            lock (typeof (SmsService))
+            lock (lockItem)
             {
                 MakeSureConnection();
                 sms = sms.Replace("\r\n", "");
@@ -164,24 +165,15 @@ namespace Qi.Sms
             for (int i = 0; i < count; i++)
             {
                 string length;
-
                 string sendMessage = PDUdecoding.EncodingSMS(ServiceCenterNumber, phone, count, i + 1, sms, out length);
-                var cmgs = new CmgsCommand {Argument = length};
-                resultCommand = Send(cmgs);
-                if (!resultCommand.Success)
-                    return false;
+                var cmgs = new CmgsCommand { Argument = length };
+                _deviceConnectin.InvokeSend(cmgs, 500);
                 var directCommand = new SendContent
                                         {
                                             Content = sendMessage
                                         };
-                resultCommand = Send(directCommand);
-                if (!resultCommand.Success)
-                    return false;
-
-                Thread.Sleep(1000);
+                _deviceConnectin.InvokeSend(directCommand, 500);
             }
-
-
             return true;
         }
 
@@ -199,7 +191,7 @@ namespace Qi.Sms
                 SendingEvent(this, new CommandEventHandlerArgs(command));
 
             string value = _deviceConnectin.Send(command);
-            var result = (AbstractCommand) command.Clone();
+            var result = (AbstractCommand)command.Clone();
             result.Init(value);
             OnReceivedEvent(result);
             return result;
@@ -207,13 +199,16 @@ namespace Qi.Sms
 
         public ReceiveSms GetSms(int position)
         {
-            var cmglCommand = (CmgrCommand) Send(new CmgrCommand {MessageIndex = position});
-            return new ReceiveSms
-                       {
-                           Content = cmglCommand.Content,
-                           SendMobile = cmglCommand.SendMobile,
-                           ReceiveTime = cmglCommand.ReceiveTime
-                       };
+            lock (lockItem)
+            {
+                var cmglCommand = (CmgrCommand)Send(new CmgrCommand { MessageIndex = position });
+                return new ReceiveSms
+                           {
+                               Content = cmglCommand.Content,
+                               SendMobile = cmglCommand.SendMobile,
+                               ReceiveTime = cmglCommand.ReceiveTime
+                           };
+            }
         }
 
         private void OnReceivedEvent(AbstractCommand comm)
@@ -224,24 +219,24 @@ namespace Qi.Sms
             }
         }
 
-        private void OnNewMessageEventHandlerArgs(CmtiCommand comm)
+        private void OnNewMessageEventHandlerArgs(int smsIndex)
         {
             if (ReceiveSmsEvent != null)
             {
-                ReceiveSmsEvent(this, new NewMessageEventHandlerArgs(comm));
+                ReceiveSmsEvent(this, new NewMessageEventHandlerArgs(smsIndex));
             }
         }
 
         public string GetServicePhone()
         {
             MakeSureConnection();
-            var result = (CscaCommand) Send(new CscaCommand());
+            var result = (CscaCommand)Send(new CscaCommand());
             return result.ServiceCenterNumber;
         }
 
         public bool Delete(int i)
         {
-            return Send(new DeleteSms {SmsIndex = i}).Success;
+            return Send(new DeleteSms { SmsIndex = i }).Success;
         }
     }
 }

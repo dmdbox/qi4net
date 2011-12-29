@@ -13,6 +13,25 @@ namespace Qi.Sms.ConsoleTest
 {
     internal class Program
     {
+        private static object lockItem = "";
+        private static void Send(string message)
+        {
+            lock (lockItem)
+            {
+                Console.WriteLine(message);
+            }
+        }
+        private static void Receive()
+        {
+            lock (lockItem)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    Send("receive and send " + i);
+                    Thread.Sleep(500);
+                }
+            }
+        }
         private static void Main(string[] args)
         {
             //Console.WriteLine(String.Format("\x01a"));
@@ -36,6 +55,14 @@ namespace Qi.Sms.ConsoleTest
             //    // _log.Error("Start sms service have error", ex);
             //    Thread.Sleep(1000);
             //}
+            ThreadPool.QueueUserWorkItem(s => Receive());
+            for (int i = 0; i < 4; i++)
+            {
+                Send("main send some " + i);
+                Thread.Sleep((300));
+            }
+            Console.Read();
+            return;
             var conn = new ComConnection("COM4", 9600);
             conn.Open();
             try

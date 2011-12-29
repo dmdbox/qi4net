@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Qi.Secret;
 using Qi.Threads;
 
@@ -10,7 +9,7 @@ namespace ThreadPerformerTest
     internal class Program
     {
         private static Int64 result;
-        private static object lockItem = "";
+        private static readonly object lockItem = "";
 
         private static void Main(string[] args)
         {
@@ -23,19 +22,16 @@ namespace ThreadPerformerTest
 
         private static void CheckSpeed()
         {
-            var max = new int[10 * 10000];
+            var max = new int[10*1000];
 
             DateTime dateTime = DateTime.Now;
-            //OnExecuteFunction_CheckSpeed(max);
+            OnExecuteFunction_CheckSpeed(max);
             Console.WriteLine("Single Thread to gen sha512 code :" + (DateTime.Now - dateTime).TotalMilliseconds);
 
             dateTime = DateTime.Now;
 
-            max.AvgExecute(4, OnExecuteFunction_CheckSpeed, () =>
-                                                    {
-                                                        Console.WriteLine("two thread to gen sha512 code:" + (DateTime.Now - dateTime).TotalMilliseconds);
-                                                    });
-
+            max.AvgExecute(16, OnExecuteFunction_CheckSpeed,
+                           () => Console.WriteLine("two thread to gen sha512 code:" +(DateTime.Now - dateTime).TotalMilliseconds));
 
 
             Console.Read();
@@ -76,21 +72,19 @@ namespace ThreadPerformerTest
             dateTime = DateTime.Now;
             result = 0;
 
-            ilist.ToArray().AvgExecute<int, long>(4, s => s.Aggregate<int, long>(0, (current, item) => current + item),
-                re =>
-                {
-                    lock (lockItem)
-                    {
-                        result += re;
-                    }
-                },//when complete add it to result
-                () => //call back
-                {
-                    Console.WriteLine("4 thread result:" + result);
-                    Console.WriteLine((DateTime.Now - dateTime).TotalMilliseconds);
-                });
-
-
+            ilist.ToArray().AvgExecute(4, s => s.Aggregate<int, long>(0, (current, item) => current + item),
+                                       re =>
+                                           {
+                                               lock (lockItem)
+                                               {
+                                                   result += re;
+                                               }
+                                           }, //when complete add it to result
+                                       () => //call back
+                                           {
+                                               Console.WriteLine("4 thread result:" + result);
+                                               Console.WriteLine((DateTime.Now - dateTime).TotalMilliseconds);
+                                           });
         }
 
         private static void OnExecuteFunction(int[] s)

@@ -1,21 +1,19 @@
 ﻿using System;
-using System.IO;
 using System.IO.Ports;
 using System.Text;
 using System.Threading;
 using Qi.Sms.Protocol;
+using Qi.Sms.Protocol.SendCommands;
 using log4net;
 
 namespace Qi.Sms.DeviceConnections
 {
     public sealed class ComConnection : IDeviceConnection
     {
+        private readonly StringBuilder _buffer = new StringBuilder();
         private readonly object _lockItem = "";
-        private readonly ILog _log = LogManager.GetLogger(typeof (ComConnection));
+        private readonly ILog _log = LogManager.GetLogger(typeof(ComConnection));
         private readonly SerialPort _serialPort;
-        private bool _hasReturnValue;
-        private StringBuilder _returnValue;
-
         public ComConnection(string portName, int baudRate)
         {
             if (portName == null)
@@ -37,7 +35,6 @@ namespace Qi.Sms.DeviceConnections
 
         #region IDeviceConnection Members
 
-        public event EventHandler<DeviceCommandEventHandlerArgs> SendingEvent;
         public event EventHandler<DeviceCommandEventHandlerArgs> ReceivedEvent;
 
         public void Dispose()
@@ -84,49 +81,54 @@ namespace Qi.Sms.DeviceConnections
 
         public string Send(AbstractCommand command)
         {
-            if (SendingEvent != null)
-                SendingEvent(this, new DeviceCommandEventHandlerArgs(command.CompleteCommand()));
-            _log.InfoFormat("send command {0}\r\n", command);
             lock (_lockItem)
             {
-                ThreadPool.QueueUserWorkItem(delegate { _serialPort.WriteLine(command.CompleteCommand()); });
-
-                _returnValue = new StringBuilder();
-                DateTime now = DateTime.Now;
-
-
-                while (true)
+                try
                 {
-                    if (_hasReturnValue)
-                    {
-                        _log.Debug("Receive data:" + _returnValue);
-                        if (command.Init(_returnValue.ToString()))
-                        {
-                            _log.Debug("Data is correct for command =" + command.GetType().Name);
-                            break;
-                        }
-                        _log.Debug("Receive data isn't expected, so continue to wait");
-                        _returnValue = new StringBuilder();
-                        _hasReturnValue = false;
-                    }
-                    Thread.Sleep(100);
-                    TimeSpan span = DateTime.Now - now;
-                    if (span.Seconds > 10)
-                    {
-                        _log.InfoFormat("Send command timeout,and exit");
-                        return ""; //throw new TimeoutException("Timeout {0} send fail.");
-                    }
+                    _buffer.Remove(0, _buffer.Length);
+                    ThreadPool.QueueUserWorkItem(delegate { _serialPort.WriteLine(command.CompleteCommand()); });
+                    return WaitReturn(command);
                 }
-
-                string result = _returnValue.ToString();
-                _hasReturnValue = false;
-                _returnValue = null;
-                _log.InfoFormat("receive command \r\n {0}", result);
-                return result;
+                finally
+                {
+                    _buffer.Remove(0, _buffer.Length);
+                }
             }
         }
 
         #endregion
+
+        public void InvokeSend(AbstractCommand command, int sleepMilSeconds)
+        {
+            lock (_lockItem)
+            {
+                _buffer.Remove(0, _buffer.Length);
+                _serialPort.WriteLine(command.CompleteCommand());
+                Thread.Sleep(sleepMilSeconds);
+                _buffer.Remove(0, _buffer.Length);
+            }
+        }
+
+        private string WaitReturn(AbstractCommand command)
+        {
+            var now = DateTime.Now;
+            while (true)
+            {
+                if ((DateTime.Now - now).TotalSeconds > 12)
+                {
+                    _log.Warn("waiting timeout.");
+                    break;
+                }
+                if (command.Init(_buffer.ToString()))
+                {
+                    break;
+                }
+                Thread.Sleep(100);
+            }
+            string result = _buffer.ToString();
+            _log.InfoFormat("receive command \r\n {0}", result);
+            return result;
+        }
 
         public void Send(string command)
         {
@@ -135,35 +137,32 @@ namespace Qi.Sms.DeviceConnections
 
         private void SerialPortDataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            var serialPort = (SerialPort) sender;
-            var result = new StringBuilder();
+            var serialPort = (SerialPort)sender;
             while (serialPort.BytesToRead > 0)
             {
                 string re = serialPort.ReadExisting();
-                result.Append(re);
-                if (_returnValue != null)
+                _buffer.Append(re);
+                if (_buffer != null)
                 {
-                    _returnValue.Append(re);
+                    _buffer.Append(re);
                 }
-                //using (var reader = new StreamWriter("c:\\a.sms.txt",true))
-                //{
-                //    reader.WriteLine(re);
-                //}
-                Thread.Sleep(100);
             }
-            if (_returnValue != null)
+
+            var result = CmtiCommand.GetSmsIndex(_buffer.ToString());
+            if (result.Length != 0)
             {
-                _hasReturnValue = true;
+                OnReceiveSms(result);
             }
-            OnReceiveEvent(result.ToString());
         }
 
-        public void OnReceiveEvent(string command)
+        private void OnReceiveSms(int[] command)
         {
-            _log.Debug("Receive:" + command);
             if (ReceivedEvent != null)
             {
-                ThreadPool.QueueUserWorkItem(e => ReceivedEvent(this, new DeviceCommandEventHandlerArgs(command)));
+                lock (_lockItem)
+                {
+                    ReceivedEvent(this, new DeviceCommandEventHandlerArgs(command));
+                }
             }
         }
     }

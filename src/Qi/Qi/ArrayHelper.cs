@@ -6,7 +6,31 @@ namespace Qi
 {
     public static class ArrayHelper
     {
-        public static string Format(this byte[] bytes, string format)
+        public static T[] SubArray<T>(T[] array, int start, int length)
+        {
+            if (array.Length - 1 < start)
+            {
+                throw new ArgumentOutOfRangeException("start", "start index is larger than array");
+            }
+            if ((start + length) > (array.Length - 1))
+            {
+                throw new ArgumentOutOfRangeException("length", "length is out of rang.");
+            }
+            var result = new T[length];
+            Array.Copy(array, start, result, 0, length);
+            return result;
+        }
+
+        public static T[] SubArray<T>(this T[] array, int start)
+        {
+            if (array.Length - 1 < start)
+            {
+                throw new ArgumentOutOfRangeException("start", "start index is larger than array");
+            }
+            return SubArray(array, start, array.Length - start);
+        }
+
+        public static string ToStringEx(this byte[] bytes, string format)
         {
             var stringbuilder = new StringBuilder(bytes.Length*2);
             foreach (byte byt in bytes)
@@ -21,9 +45,9 @@ namespace Qi
         /// </summary>
         /// <param name="bytes"></param>
         /// <returns></returns>
-        public static string Format(this byte[] bytes)
+        public static string ToStringEx(this byte[] bytes)
         {
-            return bytes.Format("X2");
+            return bytes.ToStringEx("X2");
         }
 
         /// <summary>

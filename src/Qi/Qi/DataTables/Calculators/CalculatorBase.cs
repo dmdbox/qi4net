@@ -9,8 +9,7 @@ namespace Qi.DataTables.Calculators
 
         protected CalculatorBase(Func<object, T> convertor, Func<T, T, T> calculate)
         {
-            if (convertor == null)
-                throw new ArgumentNullException("convertor");
+            if (convertor == null) throw new ArgumentNullException("convertor");
             if (calculate == null) throw new ArgumentNullException("calculate");
             _convertor = convertor;
             _calculate = calculate;

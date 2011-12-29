@@ -47,10 +47,11 @@ namespace Qi.DataTables
             column.Add(CreateAvgCalculator(typeof(T)));
             return column;
         }
-        public static ICalculator CreateAvgCalculator(Type t)
+        private static ICalculator CreateAvgCalculator(Type t)
         {
             return AvgMap[t].Invoke();
         }
+
         public static ICalculator CreateSumCalculator(Type t)
         {
             return SumMap[t].Invoke();
