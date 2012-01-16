@@ -29,14 +29,26 @@ namespace Qi
             return MapPath(new DirectoryInfo(PhysicalApplicationPath), path);
         }
 
-        public static string MapPath(DirectoryInfo currentDirectory, string mapPath)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rootDirectory">以这个路基为开始</param>
+        /// <param name="mapPath"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// <code>
+        /// var rootDirect="a/b/c";
+        /// var result=MapPath(new DirectoryInfo(rootDirect),"../b/b2"); //result is /a/b/b2
+        /// </code>
+        /// </remarks>
+        public static string MapPath(DirectoryInfo rootDirectory, string mapPath)
         {
-            if (currentDirectory == null)
-                throw new ArgumentNullException("currentDirectory");
+            if (rootDirectory == null)
+                throw new ArgumentNullException("rootDirectory");
             if (mapPath == null)
                 throw new ArgumentNullException("mapPath");
 
-            string currentPath = currentDirectory.FullName;
+            string currentPath = rootDirectory.FullName;
 
             string[] currentPathAry = currentPath.Split(
                 new[]

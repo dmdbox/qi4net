@@ -76,6 +76,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationHelperTest.cs" />
     <Compile Include="ArrayHelperTest.cs" />
     <Compile Include="EncryptHelperTest.cs" />
     <Compile Include="EnumDescriptionAttributeTest.cs" />
